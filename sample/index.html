@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, user-scalable=no">
+  <title>js-player-module-youtube.js | yama-dev</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
+  <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js"></script>
+  <script src="../dist/js-player-module-youtube.js"></script>
+
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
+  <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-91619969-3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-91619969-3');
+  </script>
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row mt-3">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+      <h2 class="mb-3">.</h2>
+
+      <p>.</p>
+
+      <hr class="mt-4 mb-4">
+
+      <h3>.</h3>
+      <div id="brightcovePlayer1">
+
+        <script>
+          var PMY = new PLAYER_MODULE_YOUTUBE({
+            id:'brightcovePlayer1',
+            videoid:'bkRhoGPo2is',
+            responsive: true,
+            on: {
+              Play: function(){ console.log('Play') },
+              Pause: function(){ console.log('Pause') },
+              Stop: function(){ console.log('Stop') },
+              StopAll: function(){ console.log('StopAll') },
+              Change: function(){ console.log('Change') }
+            }
+          });
+        </script>
+
+        <button class="btn btn-secondary" onclick="PMY.Play()">Media再生(Play)</button>
+
+        <button class="btn btn-secondary" onclick="PMY.Stop()">Media停止(Stop)</button>
+
+        <button class="btn btn-secondary" onclick="PMY.StopAll()">Media停止(StopAll)</button>
+
+        <hr>
+
+        <button class="btn btn-secondary" data-PMY-id="bkRhoGPo2is" onclick="PMY.Change('bkRhoGPo2is')">Media変更 id=bkRhoGPo2is</button>
+
+        <button class="btn btn-secondary" data-PMY-id="YWiksn1mxrk" onclick="PMY.Change('YWiksn1mxrk')">Media変更 id=YWiksn1mxrk</button>
+
+        <button class="btn_change btn btn-secondary" data-PMY-id="D-o4BqJxmJE">Media変更 id=D-o4BqJxmJE</button>
+
+        <div class="btn btn-secondary" data-PMY-id="38PDt8NRIA4" onclick="PMY.Change('38PDt8NRIA4')">
+          Media変更 id=38PDt8NRIA4<br><br>
+          <p class="display_time">00:00</p>
+          <p class="display_time_down">00:00</p>
+        </div>
+
+      </div>
+
+      <hr>
+
+    </div>
+    <div class="col-md-1"></div>
+  </div>
+</div>
+
+</body>
+</html>
