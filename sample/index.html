@@ -23,61 +23,73 @@
   </script>
 </head>
 <body>
-<div class="container-fluid">
-  <div class="row mt-3">
-    <div class="col-md-1"></div>
-    <div class="col-md-10">
-      <h2 class="mb-3">.</h2>
+<div class="container">
 
-      <p>.</p>
+  <h2 class="mb-3">.</h2>
 
-      <hr class="mt-4 mb-4">
+  <p>.</p>
 
-      <h3>.</h3>
-      <div id="brightcovePlayer1">
+  <hr class="mt-4 mb-4">
 
-        <script>
-          var PMY = new PLAYER_MODULE_YOUTUBE({
-            id:'brightcovePlayer1',
-            videoid:'bkRhoGPo2is',
-            responsive: true,
-            on: {
-              Play: function(){ console.log('Play') },
-              Pause: function(){ console.log('Pause') },
-              Stop: function(){ console.log('Stop') },
-              StopAll: function(){ console.log('StopAll') },
-              Change: function(){ console.log('Change') }
-            }
-          });
-        </script>
+  <h3>.</h3>
+  <div id="brightcovePlayer1">
 
+    <script>
+      var PMY = new PLAYER_MODULE_YOUTUBE({
+        id:'brightcovePlayer1',
+        videoid:'bkRhoGPo2is',
+        responsive: true,
+        on: {
+          Play: function(){ console.log('Play') },
+          Pause: function(){ console.log('Pause') },
+          Stop: function(){ console.log('Stop') },
+          StopAll: function(){ console.log('StopAll') },
+          Change: function(){ console.log('Change') }
+        }
+      });
+    </script>
+
+    <hr>
+
+    <div class="row">
+      <div class="col-sm mb-3">
         <button class="btn btn-secondary" onclick="PMY.Play()">Media再生(Play)</button>
-
+      </div>
+      <div class="col-sm mb-3">
         <button class="btn btn-secondary" onclick="PMY.Stop()">Media停止(Stop)</button>
-
+      </div>
+      <div class="col-sm mb-3">
         <button class="btn btn-secondary" onclick="PMY.StopAll()">Media停止(StopAll)</button>
+      </div>
+      <div class="col-sm mb-3">
+      </div>
+    </div>
 
-        <hr>
+    <hr>
 
+    <div class="row">
+      <div class="col-sm mb-3">
         <button class="btn btn-secondary" data-PMY-id="bkRhoGPo2is" onclick="PMY.Change('bkRhoGPo2is')">Media変更 id=bkRhoGPo2is</button>
-
+      </div>
+      <div class="col-sm mb-3">
         <button class="btn btn-secondary" data-PMY-id="YWiksn1mxrk" onclick="PMY.Change('YWiksn1mxrk')">Media変更 id=YWiksn1mxrk</button>
-
+      </div>
+      <div class="col-sm mb-3">
         <button class="btn_change btn btn-secondary" data-PMY-id="D-o4BqJxmJE">Media変更 id=D-o4BqJxmJE</button>
-
+      </div>
+      <div class="col-sm mb-3">
         <div class="btn btn-secondary" data-PMY-id="38PDt8NRIA4" onclick="PMY.Change('38PDt8NRIA4')">
           Media変更 id=38PDt8NRIA4<br><br>
           <p class="display_time">00:00</p>
           <p class="display_time_down">00:00</p>
         </div>
-
       </div>
-
-      <hr>
-
     </div>
-    <div class="col-md-1"></div>
+
   </div>
+
+  <hr>
+
 </div>
 
 </body>

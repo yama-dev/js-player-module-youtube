@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.0.1
+ * Version 0.0.2
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -18,7 +18,7 @@ export class PLAYER_MODULE_YOUTUBE {
   constructor(options = {}){
 
     // Set Version.
-    this.VERSION = '0.0.1';
+    this.VERSION = '0.0.2';
 
     // Use for discrimination by URL.
     this.currentUrl = location.href;
@@ -65,9 +65,6 @@ export class PLAYER_MODULE_YOUTUBE {
       StopAll : options.on.StopAll||'',
       Change  : options.on.Change||''
     }
-
-    // BrightcovePlayer MediaInfo
-    this.PlayerMediaInfo = {};
 
     // BrightcovePlayer Instance.
     this.Player = '';
@@ -224,7 +221,7 @@ export class PLAYER_MODULE_YOUTUBE {
       height: this.CONFIG.height,
       videoId: this.CONFIG.videoid,
       playerVars: {
-        fs: 0,
+        fs: 1,
         rel: 0,
         wmode: 'transparent',
         enablejsapi: 1,
@@ -253,25 +250,30 @@ export class PLAYER_MODULE_YOUTUBE {
     // CacheElement
     this.CacheElement();
 
-    // Set MediaInfo
-    // _that.PlayerMediaInfo = _that.Player.mediainfo;
+    this.SetVolume();
+    this.SetPoster();
 
-    _that.SetVolume();
-    _that.SetPoster();
+    // Set Event.
+    this.EventPlay();
+    this.EventPause();
+    this.EventStop();
 
-    _that.EventPlay();
-    _that.EventPause();
-    _that.EventStop();
+    this.EventChangeVideo();
+    this.EventFullscreen();
 
-    _that.EventChangeVideo();
+    this.EventMute();
+    this.EventVolon();
+    this.EventVoloff();
 
-    _that.EventMute();
-    _that.EventVolon();
-    _that.EventVoloff();
+    this.EventSeekbarVol();
+    this.EventSeekbarTime();
 
-    _that.EventSeekbarVol();
-    _that.EventSeekbarTime();
+    this.WatchPlayer();
 
+    this.AddGlobalObject();
+  }
+
+  WatchPlayer(){
     setInterval(()=>{
       // For Timeupdate.
       this.Update();
@@ -291,22 +293,26 @@ export class PLAYER_MODULE_YOUTUBE {
         if(this.CONFIG.muted) this.CONFIG.muted = false; 
       }
     },300);
+  }
 
+  AddGlobalObject(){
     // windowオブジェクトへインスタンスしたPlayerを配列で管理(Player-IDを文字列で追加)
+    // -> window.PLAYER_MODULE_YOUTUBE_PLATLIST
+
     if(window.PLAYER_MODULE_YOUTUBE_PLATLIST === undefined){
       window.PLAYER_MODULE_YOUTUBE_PLATLIST = [];
       window.PLAYER_MODULE_YOUTUBE_PLATLIST.push({
         Player: this.Player,
         videoid: this.CONFIG.videoid,
-        id: _that.CONFIG.id,
-        player_id: _that.CONFIG.player_id
+        id: this.CONFIG.id,
+        player_id: this.CONFIG.player_id
       });
     }else{
       window.PLAYER_MODULE_YOUTUBE_PLATLIST.push({
         Player: this.Player,
         videoid: this.CONFIG.videoid,
-        id: _that.CONFIG.id,
-        player_id: _that.CONFIG.player_id
+        id: this.CONFIG.id,
+        player_id: this.CONFIG.player_id
       });
     }
   }
@@ -506,6 +512,28 @@ export class PLAYER_MODULE_YOUTUBE {
         let id = event.currentTarget.dataset.pmyId;
         this.Change(id);
       });
+    }
+  }
+
+  EventFullscreen(){
+    let _that = this;
+
+    if(this.$uiBtnFull.length){
+      addEvent(this.$uiBtnFull, 'click' , (event) => {
+        this.Fullscreen();
+      });
+    }
+  }
+
+  Fullscreen(){
+    if (document.body.requestFullscreen) {
+      document.body.requestFullscreen();
+    } else if (document.body.msRequestFullscreen) {
+      document.body.msRequestFullscreen();
+    } else if (document.body.mozRequestFullScreen) {
+      document.body.mozRequestFullScreen();
+    } else if (document.body.webkitRequestFullscreen) {
+      document.body.webkitRequestFullscreen();
     }
   }
 
