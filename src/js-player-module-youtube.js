@@ -23,35 +23,38 @@ export class PLAYER_MODULE_YOUTUBE {
     // Use for discrimination by URL.
     this.currentUrl = location.href;
 
+    // Set Change Flgs.
+    this.PlayerChangeSeekingFlg = false;
+    this.PlayerChangeLoadFlg = true;
+
     // Set config, options.
     this.CONFIG = {
-      mode            : options.mode||'movie',
-      responsive      : options.responsive === true ? true : false,
-      id              : options.id||'pmy',
+      mode             : options.mode||'movie',
+      responsive       : options.responsive === true ? true : false,
+      id               : options.id||'pmy',
 
-      player_id       : `${options.id}_player`||'pmy_player',
-      player_id_wrap  : `${options.id}_player_wrap`||'pmy_player_wrap',
-      player_ui_id    : `${options.id}_ui`||'pmy_ui',
-      player_style_id : `${options.id}_style`||'pmy_style',
+      player_id        : `${options.id}_player`||'pmy_player',
+      player_id_wrap   : `${options.id}_player_wrap`||'pmy_player_wrap',
+      player_ui_id     : `${options.id}_ui`||'pmy_ui',
+      player_style_id  : `${options.id}_style`||'pmy_style',
 
-      videoid         : options.videoid||'',
-      width           : options.width||'',
-      height          : options.height||'',
-      volume          : options.volume||100,
-      playsinline     : options.playsinline !== false ? 'playsinline' : '',
-      loop            : options.loop === true ? 'loop' : '',
-      muted           : options.muted === true ? true : false,
+      videoid          : options.videoid||'',
+      width            : options.width||'',
+      height           : options.height||'',
+      volume           : options.volume||100,
+      playsinline      : options.playsinline !== false ? 'playsinline' : '',
+      loop             : options.loop === true ? 'loop' : '',
+      muted            : options.muted === true ? true : false,
 
-      ui_controls     : options.ui_controls === true ? 'controls' : '',
-      ui_autoplay     : options.ui_autoplay === true ? 'autoplay' : '',
-      ui_default      : options.ui_default === false ? false : true,
-      ui_default_css  : options.ui_default_css === false ? false : true,
+      ui_controls      : options.ui_controls === true ? 'controls' : '',
+      ui_autoplay      : options.ui_autoplay === true ? 'autoplay' : '',
+      ui_default_parts : options.ui_default_parts === false ? false : true,
+      ui_default_css   : options.ui_default_css === false ? false : true,
 
-      stop_outfocus   : options.stop_outfocus === true ? true : false,
-      poster          : options.poster||`//i.ytimg.com/vi/${options.videoid}/maxresdefault.jpg`,
+      stop_outfocus    : options.stop_outfocus === true ? true : false,
+      poster           : options.poster||`//i.ytimg.com/vi/${options.videoid}/maxresdefault.jpg`,
 
-      style_text      : options.style_text||'',
-      other           : options.other||''
+      add_style        : options.add_style||''
     }
 
     // Set config, callback functions.
@@ -66,17 +69,22 @@ export class PLAYER_MODULE_YOUTUBE {
       Change  : options.on.Change||''
     }
 
-    // BrightcovePlayer Instance.
+    // YoutubePlayer Instance.
     this.Player = '';
 
-    // Set Change Flgs.
-    this.PlayerChangeSeekingFlg = false;
-    this.PlayerChangeLoadFlg = true;
+    // Player wrapper.
+    this.$playerElem = selectDom(`#${this.CONFIG.id}`);
 
     // Import Views.
-    this.playerHtml       = viewPlayerMain;
-    this.playerUiHtml     = viewPlayerUi;
-    this.playerCss        = viewPlayerStyle;
+    this.playerHtml   = viewPlayerMain;
+    this.playerUiHtml = viewPlayerUi;
+    this.playerCss    = viewPlayerStyle;
+
+    // Set Options
+    // -> playerHtml
+    // -> playerCss
+    this.playerHtml = PARSE_MODULE.Str2Mustache(this.playerHtml, this.CONFIG);
+    this.playerCss  = PARSE_MODULE.Str2Mustache(this.playerCss, this.CONFIG);
 
     // Check Audio mode.
     if(this.CONFIG.mode == 'audio'){
@@ -105,16 +113,12 @@ export class PLAYER_MODULE_YOUTUBE {
       `;
     }
 
-    // Set Options
-    // -> playerHtml
-    // -> playerCss
-    this.playerHtml = PARSE_MODULE.Str2Mustache(this.playerHtml, this.CONFIG);
-    this.playerCss  = PARSE_MODULE.Str2Mustache(this.playerCss, this.CONFIG);
+    // Check Add Style.
+    if(this.CONFIG.add_style){
+      this.playerCss += this.CONFIG.add_style;
+    }
 
-    // Player wrapper.
-    this.$playerElem = selectDom(`#${this.CONFIG.id}`);
-
-    // Player main.
+    // Player Main.
     let playerHtmlDom     = document.createElement('div');
     let playerHtmlDomWrap = document.createElement('div');
     playerHtmlDom.id      = this.CONFIG.player_id;
@@ -128,19 +132,24 @@ export class PLAYER_MODULE_YOUTUBE {
       this.$playerElem[0].appendChild(playerHtmlDomWrap);
     }
 
-    // Player main.
+    // Player UI.
     let playerUiHtmlDom       = document.createElement('div');
     playerUiHtmlDom.id        = this.CONFIG.player_ui_id;
     playerUiHtmlDom.innerHTML = this.playerUiHtml;
-    if(this.CONFIG.ui_default){
-      this.$playerElem[0].appendChild(playerUiHtmlDom);
+    if(this.CONFIG.ui_default_parts){
+      if(!selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_ui_id}`).length){
+        this.$playerElem[0].appendChild(playerUiHtmlDom);
+      }
     }
 
+    // Player Styles.
     let playerCssDom       = document.createElement('style');
     playerCssDom.id        = this.CONFIG.player_style_id;
     playerCssDom.innerHTML = this.playerCss;
     if(this.CONFIG.ui_default_css){
-      this.$playerElem[0].appendChild(playerCssDom);
+      if(!selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_style_id}`).length){
+        this.$playerElem[0].appendChild(playerCssDom);
+      }
     }
 
     // SetPlayer
@@ -487,7 +496,6 @@ export class PLAYER_MODULE_YOUTUBE {
       });
 
       addEvent(this.$uiSeekbarTime, 'mousemove', (event) => {
-        console.log(_targetTime);
         if(this.PlayerChangeSeekingFlg){
           let _currentWidth  = event.currentTarget.clientWidth;
           let _clickPosition = event.currentTarget.getBoundingClientRect().left;
