@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.0.2
+ * Version 0.0.4
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -18,7 +18,7 @@ export class PLAYER_MODULE_YOUTUBE {
   constructor(options = {}){
 
     // Set Version.
-    this.VERSION = '0.0.2';
+    this.VERSION = '0.0.4';
 
     // Use for discrimination by URL.
     this.currentUrl = location.href;
@@ -153,9 +153,13 @@ export class PLAYER_MODULE_YOUTUBE {
     }
 
     // SetPlayer
-    document.addEventListener('DOMContentLoaded', (event) => {
+    if(document.readyState == 'complete'){
       this.CheckYouTubeApiScript();
-    });
+    } else {
+      document.addEventListener('DOMContentLoaded', (event) => {
+        this.CheckYouTubeApiScript();
+      });
+    }
 
   }
 
