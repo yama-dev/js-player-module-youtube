@@ -15,15 +15,15 @@ export let viewPlayerUi = `
   <div class="display_time_now">00:00</div>
   <div class="display_time_total">00:00</div>
   <div class="display_time_par">0%</div>
-  <button class="btn_play btn btn-secondary">play</button>
-  <button class="btn_pause btn btn-secondary">pause</button>
-  <button class="btn_stop btn btn-secondary">stop</button>
-  <button class="btn_mute btn btn-secondary">mute</button>
-  <button class="btn_full btn btn-secondary">full screen</button>
+  <button class="btn_play btn">play</button>
+  <button class="btn_pause btn">pause</button>
+  <button class="btn_stop btn">stop</button>
+  <button class="btn_mute btn">mute</button>
+  <button class="btn_full btn">full screen</button>
   <div class="seekbar_time"><div class="seekbar_time_bg"></div><span></span></div>
   <div class="seekbar_vol"><div class="seekbar_vol_bg"></div><span></span></div>
-  <button class="btn_volon btn btn-secondary">volume on</button>
-  <button class="btn_voloff btn btn-secondary">volume off</button>
+  <button class="btn_volon btn">volume on</button>
+  <button class="btn_voloff btn">volume off</button>
   <div class="display_poster"><img src="" alt=""></div>
   <div class="display_name"></div>
 `;
