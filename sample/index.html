@@ -32,11 +32,11 @@
   <hr class="mt-4 mb-4">
 
   <h3>.</h3>
-  <div id="brightcovePlayer1">
+  <div id="youtubePlayer">
 
     <script>
       var PMY = new PLAYER_MODULE_YOUTUBE({
-        id:'brightcovePlayer1',
+        id:'youtubePlayer',
         videoid:'bkRhoGPo2is',
         responsive: true,
         on: {
@@ -59,9 +59,10 @@
         <button class="btn btn-secondary" onclick="PMY.Stop()">Media停止(Stop)</button>
       </div>
       <div class="col-sm mb-3">
-        <button class="btn btn-secondary" onclick="PMY.StopAll()">Media停止(StopAll)</button>
+        <button class="btn btn-secondary" onclick="PMY.PauseAll()">Media停止(PauseAll)</button>
       </div>
       <div class="col-sm mb-3">
+        <button class="btn btn-secondary" onclick="PMY.StopAll()">Media停止(StopAll)</button>
       </div>
     </div>
 
