@@ -48,6 +48,8 @@ export class PLAYER_MODULE_YOUTUBE {
       height           : options.height||'',
       volume           : options.volume||100,
       playsinline      : options.playsinline !== false ? 'playsinline' : '',
+      ui_clickable     : options.ui_clickable === false ? false : true,
+
       loop             : options.loop === true ? 'loop' : '',
       muted            : options.muted === true ? true : false,
 
@@ -114,6 +116,23 @@ export class PLAYER_MODULE_YOUTUBE {
           position: absolute;
           top: 0;
           left: 0;
+        }
+      `;
+    }
+
+    // Check Clickable.
+    if(!this.CONFIG.ui_clickable){
+      this.playerCss += `
+        #${this.CONFIG.player_id_wrap} {
+          position: relative;
+        }
+        #${this.CONFIG.player_id_wrap}::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
         }
       `;
     }
