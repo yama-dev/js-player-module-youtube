@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.0.4
+ * Version 0.0.5
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -13,12 +13,15 @@ import { selectDom, hasClass, addClass, removeClass, toggleClass, setHtml, appen
 
 import { viewPlayerMain, viewPlayerUi, viewPlayerStyle } from './view.js';
 
+import polyfillObjectAssign from './polyfill.object.assign.js';
+polyfillObjectAssign();
+
 export class PLAYER_MODULE_YOUTUBE {
 
   constructor(options = {}){
 
     // Set Version.
-    this.VERSION = '0.0.4';
+    this.VERSION = '0.0.5';
 
     // Use for discrimination by URL.
     this.currentUrl = location.href;
@@ -26,6 +29,11 @@ export class PLAYER_MODULE_YOUTUBE {
     // Set Change Flgs.
     this.PlayerChangeSeekingFlg = false;
     this.PlayerChangeLoadFlg = true;
+
+    if(!options.id || !options.videoid){
+      console.log('Inadequate parameters (id, videoid)');
+      return false;
+    }
 
     // Set config, options.
     this.CONFIG = {
@@ -42,12 +50,30 @@ export class PLAYER_MODULE_YOUTUBE {
       width            : options.width||'',
       height           : options.height||'',
       volume           : options.volume||100,
-      playsinline      : options.playsinline !== false ? 'playsinline' : '',
+
+      ui_clickable     : options.ui_clickable === false ? false : true,
+
       loop             : options.loop === true ? 'loop' : '',
       muted            : options.muted === true ? true : false,
-
-      ui_controls      : options.ui_controls === true ? 'controls' : '',
       ui_autoplay      : options.ui_autoplay === true ? 'autoplay' : '',
+
+      playerVars: {
+        fs: 1,
+        rel: 0,
+        wmode: 'transparent',
+        enablejsapi: 1,
+
+        autoplay: 0,
+        loop: 0,
+        playlist: options.videoid||'',
+
+        showinfo: 1,
+        controls: 1,
+        modestbranding: 1,
+
+        playsinline: 1
+      },
+
       ui_default_parts : options.ui_default_parts === false ? false : true,
       ui_default_css   : options.ui_default_css === false ? false : true,
 
@@ -55,6 +81,11 @@ export class PLAYER_MODULE_YOUTUBE {
       poster           : options.poster||`//i.ytimg.com/vi/${options.videoid}/maxresdefault.jpg`,
 
       add_style        : options.add_style||''
+    }
+
+    // Merge Options.
+    if(options.playerVars){
+      Object.assign(this.CONFIG.playerVars,options.playerVars);
     }
 
     // Set config, callback functions.
@@ -113,9 +144,48 @@ export class PLAYER_MODULE_YOUTUBE {
       `;
     }
 
+    // Check Clickable.
+    if(!this.CONFIG.ui_clickable){
+      this.playerCss += `
+        #${this.CONFIG.player_id_wrap} {
+          position: relative;
+        }
+        #${this.CONFIG.player_id_wrap}::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+        }
+      `;
+    }
+
     // Check Add Style.
     if(this.CONFIG.add_style){
       this.playerCss += this.CONFIG.add_style;
+    }
+
+    // SetPlayer
+    if(document.readyState == 'complete'){
+      this.BuildPlayer();
+    } else {
+      document.addEventListener('DOMContentLoaded', (event) => {
+        this.BuildPlayer();
+      });
+    }
+  }
+
+  BuildPlayer(){
+    // Player UI.
+    let playerUiHtmlDom       = document.createElement('div');
+    playerUiHtmlDom.id        = this.CONFIG.player_ui_id;
+    playerUiHtmlDom.innerHTML = this.playerUiHtml;
+    if(this.CONFIG.ui_default_parts){
+      if(!selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_ui_id}`).length){
+        // this.$playerElem[0].appendChild(playerUiHtmlDom);
+        this.$playerElem[0].insertBefore(playerUiHtmlDom, this.$playerElem[0].firstElementChild);
+      }
     }
 
     // Player Main.
@@ -126,20 +196,12 @@ export class PLAYER_MODULE_YOUTUBE {
     if(selectDom(`#${this.CONFIG.id} iframe`).length){
       playerHtmlDom.innerHTML   = this.playerHtml;
       playerHtmlDomWrap.appendChild(playerHtmlDom);
-      this.$playerElem[0].appendChild(playerHtmlDomWrap);
+      // this.$playerElem[0].appendChild(playerHtmlDomWrap);
+      this.$playerElem[0].insertBefore(playerHtmlDomWrap, this.$playerElem[0].firstElementChild);
     } else {
       playerHtmlDomWrap.appendChild(playerHtmlDom);
-      this.$playerElem[0].appendChild(playerHtmlDomWrap);
-    }
-
-    // Player UI.
-    let playerUiHtmlDom       = document.createElement('div');
-    playerUiHtmlDom.id        = this.CONFIG.player_ui_id;
-    playerUiHtmlDom.innerHTML = this.playerUiHtml;
-    if(this.CONFIG.ui_default_parts){
-      if(!selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_ui_id}`).length){
-        this.$playerElem[0].appendChild(playerUiHtmlDom);
-      }
+      // this.$playerElem[0].appendChild(playerHtmlDomWrap);
+      this.$playerElem[0].insertBefore(playerHtmlDomWrap, this.$playerElem[0].firstElementChild);
     }
 
     // Player Styles.
@@ -152,15 +214,7 @@ export class PLAYER_MODULE_YOUTUBE {
       }
     }
 
-    // SetPlayer
-    if(document.readyState == 'complete'){
-      this.CheckYouTubeApiScript();
-    } else {
-      document.addEventListener('DOMContentLoaded', (event) => {
-        this.CheckYouTubeApiScript();
-      });
-    }
-
+    this.CheckYouTubeApiScript();
   }
 
   CheckYouTubeApiScript(){
@@ -229,29 +283,19 @@ export class PLAYER_MODULE_YOUTUBE {
       }
     };
 
+    let onPlayerError = (data)=>{
+      console.log(data);
+    }
+
     this.Player = new YT.Player(`${this.CONFIG.player_id}`, {
       width: this.CONFIG.width,
       height: this.CONFIG.height,
       videoId: this.CONFIG.videoid,
-      playerVars: {
-        fs: 1,
-        rel: 0,
-        wmode: 'transparent',
-        enablejsapi: 1,
-        playlist: this.CONFIG.videoid,
-
-        showinfo: 0,
-        controls: 1,
-        modestbranding: 1,
-
-        loop: 1,
-        autoplay: 1,
-        playsinline: 1
-      },
+      playerVars: this.CONFIG.playerVars,
       events: {
         onReady: onPlayerReady,
         onStateChange: onPlayerStateChange,
-        onError: function(){}
+        onError: onPlayerError
       }
     });
 
@@ -634,7 +678,7 @@ export class PLAYER_MODULE_YOUTUBE {
     }
 
     if(!this.on.Play && callback) this.on.Play = callback;
-    if(this.on.Play && typeof(this.on.Play) === 'function') this.on.Play();
+    if(this.on.Play && typeof(this.on.Play) === 'function') this.on.Play(this.Player, this.CONFIG);
   }
 
   Stop(callback){
@@ -642,7 +686,7 @@ export class PLAYER_MODULE_YOUTUBE {
     this.ClassOff();
 
     if(!this.on.Stop && callback) this.on.Stop = callback;
-    if(this.on.Stop && typeof(this.on.Stop) === 'function') this.on.Stop();
+    if(this.on.Stop && typeof(this.on.Stop) === 'function') this.on.Stop(this.Player, this.CONFIG);
   }
 
   Pause(callback){
@@ -650,7 +694,7 @@ export class PLAYER_MODULE_YOUTUBE {
     this.ClassOff();
 
     if(!this.on.Pause && callback) this.on.Pause = callback;
-    if(this.on.Pause && typeof(this.on.Pause) === 'function') this.on.Pause();
+    if(this.on.Pause && typeof(this.on.Pause) === 'function') this.on.Pause(this.Player, this.CONFIG);
   }
 
   Mute(){
@@ -713,15 +757,24 @@ export class PLAYER_MODULE_YOUTUBE {
         this.PlayerChangeLoadFlg = true;
 
         if(!this.on.Change && callback) this.on.Change = callback;
-        if(this.on.Change && typeof(this.on.Change) === 'function') this.on.Change();
-      }, 1000);
+        if(this.on.Change && typeof(this.on.Change) === 'function') this.on.Change(this.Player, this.CONFIG);
+      }, 300);
     } else {
-      this.Stop();
+      this.Play();
 
       if(!this.on.Change && callback) this.on.Change = callback;
-      if(this.on.Change && typeof(this.on.Change) === 'function') this.on.Change();
+      if(this.on.Change && typeof(this.on.Change) === 'function') this.on.Change(this.Player, this.CONFIG);
     }
 
+  }
+
+  PauseAll(callback){
+    window.PLAYER_MODULE_YOUTUBE_PLATLIST.map((item,index)=>{
+      item.Player.pauseVideo();
+    });
+
+    if(!this.on.PauseAll && callback) this.on.PauseAll = callback;
+    if(this.on.PauseAll && typeof(this.on.PauseAll) === 'function') this.on.PauseAll(this.Player, this.CONFIG);
   }
 
   StopAll(callback){
@@ -730,7 +783,7 @@ export class PLAYER_MODULE_YOUTUBE {
     });
 
     if(!this.on.StopAll && callback) this.on.StopAll = callback;
-    if(this.on.StopAll && typeof(this.on.StopAll) === 'function') this.on.StopAll();
+    if(this.on.StopAll && typeof(this.on.StopAll) === 'function') this.on.StopAll(this.Player, this.CONFIG);
   }
 
   GetTime(){
