@@ -13,6 +13,9 @@ import { selectDom, hasClass, addClass, removeClass, toggleClass, setHtml, appen
 
 import { viewPlayerMain, viewPlayerUi, viewPlayerStyle } from './view.js';
 
+import polyfillObjectAssign from './polyfill.object.assign.js';
+polyfillObjectAssign();
+
 export class PLAYER_MODULE_YOUTUBE {
 
   constructor(options = {}){
@@ -53,6 +56,24 @@ export class PLAYER_MODULE_YOUTUBE {
       loop             : options.loop === true ? 'loop' : '',
       muted            : options.muted === true ? true : false,
       ui_autoplay      : options.ui_autoplay === true ? 'autoplay' : '',
+
+      playerVars: {
+        fs: 1,
+        rel: 0,
+        wmode: 'transparent',
+        enablejsapi: 1,
+
+        autoplay: 0,
+        loop: 0,
+        playlist: options.videoid||'',
+
+        showinfo: 1,
+        controls: 1,
+        modestbranding: 1,
+
+        playsinline: 1
+      },
+
       ui_default_parts : options.ui_default_parts === false ? false : true,
       ui_default_css   : options.ui_default_css === false ? false : true,
 
@@ -60,6 +81,11 @@ export class PLAYER_MODULE_YOUTUBE {
       poster           : options.poster||`//i.ytimg.com/vi/${options.videoid}/maxresdefault.jpg`,
 
       add_style        : options.add_style||''
+    }
+
+    // Merge Options.
+    if(options.playerVars){
+      Object.assign(this.CONFIG.playerVars,options.playerVars);
     }
 
     // Set config, callback functions.
@@ -140,6 +166,28 @@ export class PLAYER_MODULE_YOUTUBE {
       this.playerCss += this.CONFIG.add_style;
     }
 
+    // SetPlayer
+    if(document.readyState == 'complete'){
+      this.BuildPlayer();
+    } else {
+      document.addEventListener('DOMContentLoaded', (event) => {
+        this.BuildPlayer();
+      });
+    }
+  }
+
+  BuildPlayer(){
+    // Player UI.
+    let playerUiHtmlDom       = document.createElement('div');
+    playerUiHtmlDom.id        = this.CONFIG.player_ui_id;
+    playerUiHtmlDom.innerHTML = this.playerUiHtml;
+    if(this.CONFIG.ui_default_parts){
+      if(!selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_ui_id}`).length){
+        // this.$playerElem[0].appendChild(playerUiHtmlDom);
+        this.$playerElem[0].insertBefore(playerUiHtmlDom, this.$playerElem[0].firstElementChild);
+      }
+    }
+
     // Player Main.
     let playerHtmlDom     = document.createElement('div');
     let playerHtmlDomWrap = document.createElement('div');
@@ -148,20 +196,12 @@ export class PLAYER_MODULE_YOUTUBE {
     if(selectDom(`#${this.CONFIG.id} iframe`).length){
       playerHtmlDom.innerHTML   = this.playerHtml;
       playerHtmlDomWrap.appendChild(playerHtmlDom);
-      this.$playerElem[0].appendChild(playerHtmlDomWrap);
+      // this.$playerElem[0].appendChild(playerHtmlDomWrap);
+      this.$playerElem[0].insertBefore(playerHtmlDomWrap, this.$playerElem[0].firstElementChild);
     } else {
       playerHtmlDomWrap.appendChild(playerHtmlDom);
-      this.$playerElem[0].appendChild(playerHtmlDomWrap);
-    }
-
-    // Player UI.
-    let playerUiHtmlDom       = document.createElement('div');
-    playerUiHtmlDom.id        = this.CONFIG.player_ui_id;
-    playerUiHtmlDom.innerHTML = this.playerUiHtml;
-    if(this.CONFIG.ui_default_parts){
-      if(!selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_ui_id}`).length){
-        this.$playerElem[0].appendChild(playerUiHtmlDom);
-      }
+      // this.$playerElem[0].appendChild(playerHtmlDomWrap);
+      this.$playerElem[0].insertBefore(playerHtmlDomWrap, this.$playerElem[0].firstElementChild);
     }
 
     // Player Styles.
@@ -174,15 +214,7 @@ export class PLAYER_MODULE_YOUTUBE {
       }
     }
 
-    // SetPlayer
-    if(document.readyState == 'complete'){
-      this.CheckYouTubeApiScript();
-    } else {
-      document.addEventListener('DOMContentLoaded', (event) => {
-        this.CheckYouTubeApiScript();
-      });
-    }
-
+    this.CheckYouTubeApiScript();
   }
 
   CheckYouTubeApiScript(){
@@ -251,29 +283,19 @@ export class PLAYER_MODULE_YOUTUBE {
       }
     };
 
+    let onPlayerError = (data)=>{
+      console.log(data);
+    }
+
     this.Player = new YT.Player(`${this.CONFIG.player_id}`, {
       width: this.CONFIG.width,
       height: this.CONFIG.height,
       videoId: this.CONFIG.videoid,
-      playerVars: {
-        fs: 1,
-        rel: 0,
-        wmode: 'transparent',
-        enablejsapi: 1,
-        playlist: this.CONFIG.videoid,
-
-        showinfo: 0,
-        controls: 1,
-        modestbranding: 1,
-
-        loop: 1,
-        autoplay: 1,
-        playsinline: 1
-      },
+      playerVars: this.CONFIG.playerVars,
       events: {
         onReady: onPlayerReady,
         onStateChange: onPlayerStateChange,
-        onError: function(){}
+        onError: onPlayerError
       }
     });
 
