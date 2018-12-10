@@ -47,13 +47,11 @@ export class PLAYER_MODULE_YOUTUBE {
       width            : options.width||'',
       height           : options.height||'',
       volume           : options.volume||100,
-      playsinline      : options.playsinline !== false ? 'playsinline' : '',
+
       ui_clickable     : options.ui_clickable === false ? false : true,
 
       loop             : options.loop === true ? 'loop' : '',
       muted            : options.muted === true ? true : false,
-
-      ui_controls      : options.ui_controls === true ? 'controls' : '',
       ui_autoplay      : options.ui_autoplay === true ? 'autoplay' : '',
       ui_default_parts : options.ui_default_parts === false ? false : true,
       ui_default_css   : options.ui_default_css === false ? false : true,
