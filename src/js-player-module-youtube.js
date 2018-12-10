@@ -729,6 +729,13 @@ export class PLAYER_MODULE_YOUTUBE {
 
   }
 
+  PauseAll(callback){
+    window.PLAYER_MODULE_YOUTUBE_PLATLIST.map((item,index)=>{
+      item.Player.pauseVideo();
+    });
+
+    if(!this.on.PauseAll && callback) this.on.PauseAll = callback;
+    if(this.on.PauseAll && typeof(this.on.PauseAll) === 'function') this.on.PauseAll(this.Player, this.CONFIG);
   }
 
   StopAll(callback){
