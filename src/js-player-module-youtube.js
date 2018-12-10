@@ -27,6 +27,11 @@ export class PLAYER_MODULE_YOUTUBE {
     this.PlayerChangeSeekingFlg = false;
     this.PlayerChangeLoadFlg = true;
 
+    if(!options.id || !options.videoid){
+      console.log('Inadequate parameters (id, videoid)');
+      return false;
+    }
+
     // Set config, options.
     this.CONFIG = {
       mode             : options.mode||'movie',
