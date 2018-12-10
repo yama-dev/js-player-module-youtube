@@ -639,7 +639,7 @@ export class PLAYER_MODULE_YOUTUBE {
     }
 
     if(!this.on.Play && callback) this.on.Play = callback;
-    if(this.on.Play && typeof(this.on.Play) === 'function') this.on.Play();
+    if(this.on.Play && typeof(this.on.Play) === 'function') this.on.Play(this.Player, this.CONFIG);
   }
 
   Stop(callback){
@@ -647,7 +647,7 @@ export class PLAYER_MODULE_YOUTUBE {
     this.ClassOff();
 
     if(!this.on.Stop && callback) this.on.Stop = callback;
-    if(this.on.Stop && typeof(this.on.Stop) === 'function') this.on.Stop();
+    if(this.on.Stop && typeof(this.on.Stop) === 'function') this.on.Stop(this.Player, this.CONFIG);
   }
 
   Pause(callback){
@@ -655,7 +655,7 @@ export class PLAYER_MODULE_YOUTUBE {
     this.ClassOff();
 
     if(!this.on.Pause && callback) this.on.Pause = callback;
-    if(this.on.Pause && typeof(this.on.Pause) === 'function') this.on.Pause();
+    if(this.on.Pause && typeof(this.on.Pause) === 'function') this.on.Pause(this.Player, this.CONFIG);
   }
 
   Mute(){
@@ -718,14 +718,16 @@ export class PLAYER_MODULE_YOUTUBE {
         this.PlayerChangeLoadFlg = true;
 
         if(!this.on.Change && callback) this.on.Change = callback;
-        if(this.on.Change && typeof(this.on.Change) === 'function') this.on.Change();
-      }, 1000);
+        if(this.on.Change && typeof(this.on.Change) === 'function') this.on.Change(this.Player, this.CONFIG);
+      }, 300);
     } else {
-      this.Stop();
+      this.Play();
 
       if(!this.on.Change && callback) this.on.Change = callback;
-      if(this.on.Change && typeof(this.on.Change) === 'function') this.on.Change();
+      if(this.on.Change && typeof(this.on.Change) === 'function') this.on.Change(this.Player, this.CONFIG);
     }
+
+  }
 
   }
 
@@ -735,7 +737,7 @@ export class PLAYER_MODULE_YOUTUBE {
     });
 
     if(!this.on.StopAll && callback) this.on.StopAll = callback;
-    if(this.on.StopAll && typeof(this.on.StopAll) === 'function') this.on.StopAll();
+    if(this.on.StopAll && typeof(this.on.StopAll) === 'function') this.on.StopAll(this.Player, this.CONFIG);
   }
 
   GetTime(){
