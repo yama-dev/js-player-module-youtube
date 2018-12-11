@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.0.5
+ * Version 0.0.6
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -21,7 +21,7 @@ export class PLAYER_MODULE_YOUTUBE {
   constructor(options = {}){
 
     // Set Version.
-    this.VERSION = '0.0.5';
+    this.VERSION = '0.0.6';
 
     // Use for discrimination by URL.
     this.currentUrl = location.href;
@@ -55,7 +55,6 @@ export class PLAYER_MODULE_YOUTUBE {
 
       loop             : options.loop === true ? 'loop' : '',
       muted            : options.muted === true ? true : false,
-      ui_autoplay      : options.ui_autoplay === true ? 'autoplay' : '',
 
       playerVars: {
         fs: 1,
@@ -110,6 +109,7 @@ export class PLAYER_MODULE_YOUTUBE {
     this.playerHtml   = viewPlayerMain;
     this.playerUiHtml = viewPlayerUi;
     this.playerCss    = viewPlayerStyle;
+    this.playerCssOption = '';
 
     // Set Options
     // -> playerHtml
@@ -121,12 +121,12 @@ export class PLAYER_MODULE_YOUTUBE {
     if(this.CONFIG.mode == 'audio'){
       this.CONFIG.width  = 1;
       this.CONFIG.height = 1;
-      this.playerCss += `#${this.CONFIG.player_id} { opacity: 0; }`;
+      this.playerCssOption += `#${this.CONFIG.player_id} { opacity: 0; }`;
     }
 
     // Check Responsive.
     if(this.CONFIG.responsive){
-      this.playerCss += `
+      this.playerCssOption += `
         #${this.CONFIG.player_id_wrap} {
           position: relative;
           width: 100%;
@@ -146,7 +146,7 @@ export class PLAYER_MODULE_YOUTUBE {
 
     // Check Clickable.
     if(!this.CONFIG.ui_clickable){
-      this.playerCss += `
+      this.playerCssOption += `
         #${this.CONFIG.player_id_wrap} {
           position: relative;
         }
@@ -163,7 +163,7 @@ export class PLAYER_MODULE_YOUTUBE {
 
     // Check Add Style.
     if(this.CONFIG.add_style){
-      this.playerCss += this.CONFIG.add_style;
+      this.playerCssOption += this.CONFIG.add_style;
     }
 
     // SetPlayer
@@ -207,8 +207,14 @@ export class PLAYER_MODULE_YOUTUBE {
     // Player Styles.
     let playerCssDom       = document.createElement('style');
     playerCssDom.id        = this.CONFIG.player_style_id;
-    playerCssDom.innerHTML = this.playerCss;
     if(this.CONFIG.ui_default_css){
+      playerCssDom.innerHTML = this.playerCss;
+      playerCssDom.innerHTML += this.playerCssOption;
+      if(!selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_style_id}`).length){
+        this.$playerElem[0].appendChild(playerCssDom);
+      }
+    } else {
+      playerCssDom.innerHTML = this.playerCssOption;
       if(!selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_style_id}`).length){
         this.$playerElem[0].appendChild(playerCssDom);
       }
