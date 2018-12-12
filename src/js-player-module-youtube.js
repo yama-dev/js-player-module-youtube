@@ -384,6 +384,10 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   CacheElement(){
+    this.$playerElem                 = selectDom(`#${this.CONFIG.id}`);
+    this.$playerElemMain             = selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_id}`);
+    this.$playerElemMainWrap         = selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_id_wrap}`);
+
     this.$uiBtnPlay                  = selectDom('#'+this.CONFIG.id+' .btn_play');
     this.$uiBtnStop                  = selectDom('#'+this.CONFIG.id+' .btn_stop');
     this.$uiBtnPause                 = selectDom('#'+this.CONFIG.id+' .btn_pause');
