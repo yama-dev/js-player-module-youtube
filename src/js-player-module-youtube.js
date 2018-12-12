@@ -63,6 +63,7 @@ export class PLAYER_MODULE_YOUTUBE {
         enablejsapi: 1,
         html5: 1,
         iv_load_policy: 3,
+        disablekb: 1,
 
         autoplay: 0,
         loop: 0,
