@@ -61,6 +61,8 @@ export class PLAYER_MODULE_YOUTUBE {
         rel: 0,
         wmode: 'transparent',
         enablejsapi: 1,
+        html5: 1,
+        iv_load_policy: 3,
 
         autoplay: 0,
         loop: 0,
