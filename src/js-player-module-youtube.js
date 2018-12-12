@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.0.6
+ * Version 0.0.7
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -21,7 +21,7 @@ export class PLAYER_MODULE_YOUTUBE {
   constructor(options = {}){
 
     // Set Version.
-    this.VERSION = '0.0.6';
+    this.VERSION = '0.0.7';
 
     // Use for discrimination by URL.
     this.currentUrl = location.href;
@@ -61,6 +61,9 @@ export class PLAYER_MODULE_YOUTUBE {
         rel: 0,
         wmode: 'transparent',
         enablejsapi: 1,
+        html5: 1,
+        iv_load_policy: 3,
+        disablekb: 1,
 
         autoplay: 0,
         loop: 0,
@@ -276,6 +279,7 @@ export class PLAYER_MODULE_YOUTUBE {
         this.ClassOn();
       }
       if (event.data == YT.PlayerState.ENDED) {
+        this.Player.stopVideo();
         this.ClassOff();
       }
       if (event.data == YT.PlayerState.PAUSED) {
@@ -381,6 +385,10 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   CacheElement(){
+    this.$playerElem                 = selectDom(`#${this.CONFIG.id}`);
+    this.$playerElemMain             = selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_id}`);
+    this.$playerElemMainWrap         = selectDom(`#${this.CONFIG.id} #${this.CONFIG.player_id_wrap}`);
+
     this.$uiBtnPlay                  = selectDom('#'+this.CONFIG.id+' .btn_play');
     this.$uiBtnStop                  = selectDom('#'+this.CONFIG.id+' .btn_stop');
     this.$uiBtnPause                 = selectDom('#'+this.CONFIG.id+' .btn_pause');
@@ -521,7 +529,6 @@ export class PLAYER_MODULE_YOUTUBE {
 
       addEvent(this.$uiSeekbarTime, 'mousedown', (event) => {
         this.PlayerChangeSeekingFlg = true;
-        this.Pause();
         let _currentWidth  = event.currentTarget.clientWidth;
         let _clickPosition = event.currentTarget.getBoundingClientRect().left;
         let _targetWidth   = (event.pageX - _clickPosition) / _currentWidth;
