@@ -278,6 +278,7 @@ export class PLAYER_MODULE_YOUTUBE {
         this.ClassOn();
       }
       if (event.data == YT.PlayerState.ENDED) {
+        this.Player.stopVideo();
         this.ClassOff();
       }
       if (event.data == YT.PlayerState.PAUSED) {
