@@ -521,7 +521,6 @@ export class PLAYER_MODULE_YOUTUBE {
 
       addEvent(this.$uiSeekbarTime, 'mousedown', (event) => {
         this.PlayerChangeSeekingFlg = true;
-        this.Pause();
         let _currentWidth  = event.currentTarget.clientWidth;
         let _clickPosition = event.currentTarget.getBoundingClientRect().left;
         let _targetWidth   = (event.pageX - _clickPosition) / _currentWidth;
