@@ -403,6 +403,7 @@ export class PLAYER_MODULE_YOUTUBE {
     this.$uiDisplayTimeDown          = selectDom('#'+this.CONFIG.id+' .display_time_down');
     this.$uiDisplayTimePar           = selectDom('#'+this.CONFIG.id+' .display_time_par');
     this.$uiDisplayPoster            = selectDom('#'+this.CONFIG.id+' .display_poster');
+    this.$uiDisplayPosterBg          = selectDom('#'+this.CONFIG.id+' .display_poster_background');
     this.$uiDisplayName              = selectDom('#'+this.CONFIG.id+' .display_name');
 
     this.$uiSeekbarVol               = selectDom('#'+this.CONFIG.id+' .seekbar_vol');
@@ -854,6 +855,7 @@ export class PLAYER_MODULE_YOUTUBE {
         setHtml(this.$uiDisplayPoster, '');
       } else {
         setHtml(this.$uiDisplayPoster, `<img src="${this.CONFIG.poster}" alt="">`);
+        this.$uiDisplayPosterBg[0].style.backgroundImage = `url(${this.CONFIG.poster})`;
       }
     }
 
