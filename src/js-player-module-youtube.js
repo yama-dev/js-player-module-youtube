@@ -642,36 +642,32 @@ export class PLAYER_MODULE_YOUTUBE {
     // メディアを変更中を判定
     if(this.PlayerChangeLoadFlg){
       // 再生時間の更新(分秒)
-      setHtml( this.$uiDisplayTime, this.GetTime()+'/'+this.GetTimeMax() );
-      setHtml( this.$uiDisplayTimeNow, this.GetTime() );
-      setHtml( this.$uiDisplayTimeTotal, this.GetTimeMax() );
-      setHtml( this.$uiBtnChangeDisplayTime, this.GetTime()+'/'+this.GetTimeMax() );
-
-      // 再生時間の更新(分秒)
-      setHtml( this.$uiDisplayTimeDown, this.GetTimeDown() );
-      setHtml( this.$uiBtnChangeDisplayTimeDown, this.GetTimeDown() );
+      if(this.$uiDisplayTime.length) setHtml( this.$uiDisplayTime, this.GetTime()+'/'+this.GetTimeMax() );
+      if(this.$uiDisplayTimeNow.length) setHtml( this.$uiDisplayTimeNow, this.GetTime() );
+      if(this.$uiDisplayTimeTotal.length) setHtml( this.$uiDisplayTimeTotal, this.GetTimeMax() );
+      if(this.$uiDisplayTimeDown.length) setHtml( this.$uiDisplayTimeDown, this.GetTimeDown() );
+      if(this.$uiBtnChangeDisplayTime.length) setHtml( this.$uiBtnChangeDisplayTime, this.GetTime()+'/'+this.GetTimeMax() );
+      if(this.$uiBtnChangeDisplayTimeDown.length) setHtml( this.$uiBtnChangeDisplayTimeDown, this.GetTimeDown() );
 
       // 再生時間の更新(％)
-      setHtml( this.$uiDisplayTimePar, this.GetTimePar() );
+      if(this.$uiDisplayTimePar.length) setHtml( this.$uiDisplayTimePar, this.GetTimePar() );
 
       // シークバーの更新(％)
-      this.$uiSeekbarTimeCover[0].style.width = this.GetTimePar();
+      if(this.$uiSeekbarTimeCover.length) this.$uiSeekbarTimeCover[0].style.width = this.GetTimePar();
     } else {
       // 再生時間の更新(分秒)
-      setHtml( this.$uiDisplayTime, '00:00' );
-      setHtml( this.$uiDisplayTimeNow, '00:00' );
-      setHtml( this.$uiDisplayTimeTotal, '00:00' );
-      setHtml( this.$uiBtnChangeDisplayTime, '00:00' );
-
-      // 再生時間の更新(分秒)
-      setHtml( this.$uiDisplayTimeDown, '00:00' );
-      setHtml( this.$uiBtnChangeDisplayTimeDown, '00:00' );
+      if(this.$uiDisplayTime.length) setHtml( this.$uiDisplayTime, '00:00' );
+      if(this.$uiDisplayTimeNow.length) setHtml( this.$uiDisplayTimeNow, '00:00' );
+      if(this.$uiDisplayTimeTotal.length) setHtml( this.$uiDisplayTimeTotal, '00:00' );
+      if(this.$uiDisplayTimeDown.length) setHtml( this.$uiDisplayTimeDown, '00:00' );
+      if(this.$uiBtnChangeDisplayTime.length) setHtml( this.$uiBtnChangeDisplayTime, '00:00' );
+      if(this.$uiBtnChangeDisplayTimeDown.length) setHtml( this.$uiBtnChangeDisplayTimeDown, '00:00' );
 
       // 再生時間の更新(％)
-      setHtml( this.$uiDisplayTimePar, '0%' );
+      if(this.$uiDisplayTimePar.length) setHtml( this.$uiDisplayTimePar, '0%' );
 
       // シークバーの更新(％)
-      this.$uiSeekbarTimeCover[0].style.width = '0%';
+      if(this.$uiSeekbarTimeCover.length) this.$uiSeekbarTimeCover[0].style.width = '0%';
     }
 
   }
