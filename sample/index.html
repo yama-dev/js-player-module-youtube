@@ -2,8 +2,8 @@
 <html lang="ja">
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, user-scalable=no">
-  <title>js-player-module-youtube.js | yama-dev</title>
+  <meta name="viewport" content="width=device-width">
+  <title>PLAYER MODULE YOUTUBE v0.0.8 | yama-dev</title>
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
@@ -25,66 +25,94 @@
 <body>
 <div class="container">
 
-  <h2 class="mb-3">.</h2>
+  <h2 class="mt-3 mb-3">PLAYER MODULE YOUTUBE v0.0.8</h2>
 
-  <p>.</p>
+  <p>YouTube custom player using the YouTube IFrame Player API.</p>
+
+  <span class="p-sns"><a class="github-button" href="https://github.com/yama-dev" data-show-count="true" aria-label="Follow @yama-dev on GitHub">Follow @yama-dev</a></span>
+  <span class="p-sns"><a class="github-button" href="https://github.com/yama-dev/js-player-module-youtube/releases" data-icon="octicon-cloud-download" aria-label="Download yama-dev/js-player-module-youtube on GitHub">Download</a></span>
+  <span class="p-sns"><a class="github-button" href="https://github.com/yama-dev/js-player-module-youtube" data-icon="octicon-star" data-show-count="true" aria-label="Star yama-dev/js-player-module-youtube on GitHub">Star</a></span>
+  <span class="p-sns"><a class="github-button" href="https://github.com/yama-dev/js-player-module-youtube/fork" data-icon="octicon-repo-forked" data-show-count="true" aria-label="Fork yama-dev/js-player-module-youtube on GitHub">Fork</a></span>
+  <span class="p-sns"><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="PLAYER MODULE YOUTUBE v0.0.8 YouTube custom player using the YouTube IFrame Player API." data-show-count="false">Tweet</a></span>
+  <style>.p-sns > span{ display: inline-block; }</style>
 
   <hr class="mt-4 mb-4">
 
-  <h3>.</h3>
-  <div id="youtubePlayer">
+  <h3>Basic Use</h3>
+  <pre class="prettyprint lang-html mt-2">
+    <code>
+    &lt;div id=&quot;youtubePlayer&quot;&gt;
+      &lt;script&gt;
+        var PMY = new PLAYER_MODULE_YOUTUBE({
+          id:&#039;youtubePlayer&#039;,
+          videoid:&#039;bkRhoGPo2is&#039;
+        });
+      &lt;/script&gt;
+    &lt;/div&gt;</code>
+  </pre>
 
-    <script>
-      var PMY = new PLAYER_MODULE_YOUTUBE({
-        id:'youtubePlayer',
-        videoid:'bkRhoGPo2is',
-        responsive: true,
-        on: {
-          Play: function(){ console.log('Play') },
-          Pause: function(){ console.log('Pause') },
-          Stop: function(){ console.log('Stop') },
-          StopAll: function(){ console.log('StopAll') },
-          Change: function(){ console.log('Change') }
-        }
-      });
-    </script>
+  <hr class="mt-4 mb-4">
 
-    <hr>
+  <div class="row">
+    <div class="col-sm col-lg6 mb-4">
 
-    <div class="row">
-      <div class="col-sm mb-3">
-        <button class="btn btn-secondary" onclick="PMY.Play()">Media再生(Play)</button>
+      <div id="youtubePlayer" style="max-width: 750px;">
+        <script>
+          var PMY = new PLAYER_MODULE_YOUTUBE({
+            id:'youtubePlayer',
+            videoid:'bkRhoGPo2is',
+            responsive: true,
+            on: {
+              Play: function(){ console.log('Play') },
+              Pause: function(){ console.log('Pause') },
+              Stop: function(){ console.log('Stop') },
+              StopAll: function(){ console.log('StopAll') },
+              Change: function(){ console.log('Change') }
+            }
+          });
+        </script>
       </div>
-      <div class="col-sm mb-3">
-        <button class="btn btn-secondary" onclick="PMY.Stop()">Media停止(Stop)</button>
-      </div>
-      <div class="col-sm mb-3">
-        <button class="btn btn-secondary" onclick="PMY.PauseAll()">Media停止(PauseAll)</button>
-      </div>
-      <div class="col-sm mb-3">
-        <button class="btn btn-secondary" onclick="PMY.StopAll()">Media停止(StopAll)</button>
-      </div>
+
     </div>
+    <div class="col-sm mb-4">
 
-    <hr>
-
-    <div class="row">
-      <div class="col-sm mb-3">
-        <button class="btn btn-secondary" data-PMY-id="bkRhoGPo2is" onclick="PMY.Change('bkRhoGPo2is')">Media変更 id=bkRhoGPo2is</button>
-      </div>
-      <div class="col-sm mb-3">
-        <button class="btn btn-secondary" data-PMY-id="YWiksn1mxrk" onclick="PMY.Change('YWiksn1mxrk')">Media変更 id=YWiksn1mxrk</button>
-      </div>
-      <div class="col-sm mb-3">
-        <button class="btn_change btn btn-secondary" data-PMY-id="D-o4BqJxmJE">Media変更 id=D-o4BqJxmJE</button>
-      </div>
-      <div class="col-sm mb-3">
-        <div class="btn btn-secondary" data-PMY-id="38PDt8NRIA4" onclick="PMY.Change('38PDt8NRIA4')">
-          Media変更 id=38PDt8NRIA4<br><br>
-          <p class="display_time">00:00</p>
-          <p class="display_time_down">00:00</p>
+      <div class="row">
+        <div class="col-sm mb-3">
+          <button class="btn btn-secondary" onclick="PMY.Play()">Media再生(Play)</button>
+        </div>
+        <div class="col-sm mb-3">
+          <button class="btn btn-secondary" onclick="PMY.Stop()">Media停止(Stop)</button>
+        </div>
+        <div class="col-sm mb-3">
+          <button class="btn btn-secondary" onclick="PMY.PauseAll()">Media停止(PauseAll)</button>
+        </div>
+        <div class="col-sm mb-3">
+          <button class="btn btn-secondary" onclick="PMY.StopAll()">Media停止(StopAll)</button>
         </div>
       </div>
+
+    </div>
+    <div class="col-sm mb-4">
+
+      <div class="row">
+        <div class="col-sm mb-3">
+          <button class="btn btn-secondary" data-PMY-id="bkRhoGPo2is" onclick="PMY.Change('bkRhoGPo2is')">Media変更 id=bkRhoGPo2is</button>
+        </div>
+        <div class="col-sm mb-3">
+          <button class="btn btn-secondary" data-PMY-id="YWiksn1mxrk" onclick="PMY.Change('YWiksn1mxrk')">Media変更 id=YWiksn1mxrk</button>
+        </div>
+        <div class="col-sm mb-3">
+          <button class="btn btn-secondary" data-PMY-id="YWiksn1mxrk" onclick="PMY.Change('D-o4BqJxmJE')">Media変更 id=D-o4BqJxmJE</button>
+        </div>
+        <div class="col-sm mb-3">
+          <div class="btn btn-secondary" data-PMY-id="38PDt8NRIA4" onclick="PMY.Change('38PDt8NRIA4')">
+            Media変更 id=38PDt8NRIA4<br><br>
+            <p class="display_time">00:00</p>
+            <p class="display_time_down">00:00</p>
+          </div>
+        </div>
+      </div>
+
     </div>
 
   </div>
