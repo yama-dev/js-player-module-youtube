@@ -98,6 +98,7 @@ export class PLAYER_MODULE_YOUTUBE {
       Play    : options.on.Play||'',
       Pause   : options.on.Pause||'',
       Stop    : options.on.Stop||'',
+      End     : options.on.End||'',
       StopAll : options.on.StopAll||'',
       Change  : options.on.Change||''
     }
@@ -281,6 +282,7 @@ export class PLAYER_MODULE_YOUTUBE {
       if (event.data == YT.PlayerState.ENDED) {
         this.Player.stopVideo();
         this.ClassOff();
+        if(this.on.End && typeof(this.on.End) === 'function') this.on.End(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.PAUSED) {
         this.ClassOff();
