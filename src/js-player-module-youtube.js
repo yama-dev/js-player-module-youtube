@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.0.8
+ * Version 0.0.9
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -21,7 +21,7 @@ export class PLAYER_MODULE_YOUTUBE {
   constructor(options = {}){
 
     // Set Version.
-    this.VERSION = '0.0.8';
+    this.VERSION = '0.0.9';
 
     // Use for discrimination by URL.
     this.currentUrl = location.href;
@@ -98,6 +98,7 @@ export class PLAYER_MODULE_YOUTUBE {
       Play    : options.on.Play||'',
       Pause   : options.on.Pause||'',
       Stop    : options.on.Stop||'',
+      End     : options.on.End||'',
       StopAll : options.on.StopAll||'',
       Change  : options.on.Change||''
     }
@@ -281,6 +282,7 @@ export class PLAYER_MODULE_YOUTUBE {
       if (event.data == YT.PlayerState.ENDED) {
         this.Player.stopVideo();
         this.ClassOff();
+        if(this.on.End && typeof(this.on.End) === 'function') this.on.End(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.PAUSED) {
         this.ClassOff();
@@ -680,6 +682,9 @@ export class PLAYER_MODULE_YOUTUBE {
         // When the player is stopped.
         this.Player.playVideo();
         this.ClassOn();
+
+        if(!this.on.Play && callback) this.on.Play = callback;
+        if(this.on.Play && typeof(this.on.Play) === 'function') this.on.Play(this.Player, this.CONFIG);
       } else {
         // When the player is playing.
         _that.Pause();
@@ -687,8 +692,6 @@ export class PLAYER_MODULE_YOUTUBE {
       }
     }
 
-    if(!this.on.Play && callback) this.on.Play = callback;
-    if(this.on.Play && typeof(this.on.Play) === 'function') this.on.Play(this.Player, this.CONFIG);
   }
 
   Stop(callback){
@@ -855,8 +858,11 @@ export class PLAYER_MODULE_YOUTUBE {
         setHtml(this.$uiDisplayPoster, '');
       } else {
         setHtml(this.$uiDisplayPoster, `<img src="${this.CONFIG.poster}" alt="">`);
-        this.$uiDisplayPosterBg[0].style.backgroundImage = `url(${this.CONFIG.poster})`;
       }
+    }
+
+    if(this.$uiDisplayPosterBg.length && this.CONFIG.mode != 'audio'){
+      this.$uiDisplayPosterBg[0].style.backgroundImage = `url(${this.CONFIG.poster})`;
     }
 
   }

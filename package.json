@@ -1,6 +1,6 @@
 {
   "name": "js-player-module-youtube",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "YouTube custom player using the YouTube IFrame Player API.",
   "keywords": [
     "YouTube",
