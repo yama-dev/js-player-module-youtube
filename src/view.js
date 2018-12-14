@@ -25,6 +25,7 @@ export let viewPlayerUi = `
   <button class="btn_volon btn">volume on</button>
   <button class="btn_voloff btn">volume off</button>
   <div class="display_poster"><img src="" alt=""></div>
+  <div class="display_poster_background"></div>
   <div class="display_name"></div>
 `;
 

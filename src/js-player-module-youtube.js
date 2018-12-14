@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.0.7
+ * Version 0.0.8
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -21,7 +21,7 @@ export class PLAYER_MODULE_YOUTUBE {
   constructor(options = {}){
 
     // Set Version.
-    this.VERSION = '0.0.7';
+    this.VERSION = '0.0.8';
 
     // Use for discrimination by URL.
     this.currentUrl = location.href;
@@ -403,6 +403,7 @@ export class PLAYER_MODULE_YOUTUBE {
     this.$uiDisplayTimeDown          = selectDom('#'+this.CONFIG.id+' .display_time_down');
     this.$uiDisplayTimePar           = selectDom('#'+this.CONFIG.id+' .display_time_par');
     this.$uiDisplayPoster            = selectDom('#'+this.CONFIG.id+' .display_poster');
+    this.$uiDisplayPosterBg          = selectDom('#'+this.CONFIG.id+' .display_poster_background');
     this.$uiDisplayName              = selectDom('#'+this.CONFIG.id+' .display_name');
 
     this.$uiSeekbarVol               = selectDom('#'+this.CONFIG.id+' .seekbar_vol');
@@ -642,36 +643,32 @@ export class PLAYER_MODULE_YOUTUBE {
     // メディアを変更中を判定
     if(this.PlayerChangeLoadFlg){
       // 再生時間の更新(分秒)
-      setHtml( this.$uiDisplayTime, this.GetTime()+'/'+this.GetTimeMax() );
-      setHtml( this.$uiDisplayTimeNow, this.GetTime() );
-      setHtml( this.$uiDisplayTimeTotal, this.GetTimeMax() );
-      setHtml( this.$uiBtnChangeDisplayTime, this.GetTime()+'/'+this.GetTimeMax() );
-
-      // 再生時間の更新(分秒)
-      setHtml( this.$uiDisplayTimeDown, this.GetTimeDown() );
-      setHtml( this.$uiBtnChangeDisplayTimeDown, this.GetTimeDown() );
+      if(this.$uiDisplayTime.length) setHtml( this.$uiDisplayTime, this.GetTime()+'/'+this.GetTimeMax() );
+      if(this.$uiDisplayTimeNow.length) setHtml( this.$uiDisplayTimeNow, this.GetTime() );
+      if(this.$uiDisplayTimeTotal.length) setHtml( this.$uiDisplayTimeTotal, this.GetTimeMax() );
+      if(this.$uiDisplayTimeDown.length) setHtml( this.$uiDisplayTimeDown, this.GetTimeDown() );
+      if(this.$uiBtnChangeDisplayTime.length) setHtml( this.$uiBtnChangeDisplayTime, this.GetTime()+'/'+this.GetTimeMax() );
+      if(this.$uiBtnChangeDisplayTimeDown.length) setHtml( this.$uiBtnChangeDisplayTimeDown, this.GetTimeDown() );
 
       // 再生時間の更新(％)
-      setHtml( this.$uiDisplayTimePar, this.GetTimePar() );
+      if(this.$uiDisplayTimePar.length) setHtml( this.$uiDisplayTimePar, this.GetTimePar() );
 
       // シークバーの更新(％)
-      this.$uiSeekbarTimeCover[0].style.width = this.GetTimePar();
+      if(this.$uiSeekbarTimeCover.length) this.$uiSeekbarTimeCover[0].style.width = this.GetTimePar();
     } else {
       // 再生時間の更新(分秒)
-      setHtml( this.$uiDisplayTime, '00:00' );
-      setHtml( this.$uiDisplayTimeNow, '00:00' );
-      setHtml( this.$uiDisplayTimeTotal, '00:00' );
-      setHtml( this.$uiBtnChangeDisplayTime, '00:00' );
-
-      // 再生時間の更新(分秒)
-      setHtml( this.$uiDisplayTimeDown, '00:00' );
-      setHtml( this.$uiBtnChangeDisplayTimeDown, '00:00' );
+      if(this.$uiDisplayTime.length) setHtml( this.$uiDisplayTime, '00:00' );
+      if(this.$uiDisplayTimeNow.length) setHtml( this.$uiDisplayTimeNow, '00:00' );
+      if(this.$uiDisplayTimeTotal.length) setHtml( this.$uiDisplayTimeTotal, '00:00' );
+      if(this.$uiDisplayTimeDown.length) setHtml( this.$uiDisplayTimeDown, '00:00' );
+      if(this.$uiBtnChangeDisplayTime.length) setHtml( this.$uiBtnChangeDisplayTime, '00:00' );
+      if(this.$uiBtnChangeDisplayTimeDown.length) setHtml( this.$uiBtnChangeDisplayTimeDown, '00:00' );
 
       // 再生時間の更新(％)
-      setHtml( this.$uiDisplayTimePar, '0%' );
+      if(this.$uiDisplayTimePar.length) setHtml( this.$uiDisplayTimePar, '0%' );
 
       // シークバーの更新(％)
-      this.$uiSeekbarTimeCover[0].style.width = '0%';
+      if(this.$uiSeekbarTimeCover.length) this.$uiSeekbarTimeCover[0].style.width = '0%';
     }
 
   }
@@ -858,6 +855,7 @@ export class PLAYER_MODULE_YOUTUBE {
         setHtml(this.$uiDisplayPoster, '');
       } else {
         setHtml(this.$uiDisplayPoster, `<img src="${this.CONFIG.poster}" alt="">`);
+        this.$uiDisplayPosterBg[0].style.backgroundImage = `url(${this.CONFIG.poster})`;
       }
     }
 
