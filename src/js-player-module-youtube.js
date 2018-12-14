@@ -680,6 +680,9 @@ export class PLAYER_MODULE_YOUTUBE {
         // When the player is stopped.
         this.Player.playVideo();
         this.ClassOn();
+
+        if(!this.on.Play && callback) this.on.Play = callback;
+        if(this.on.Play && typeof(this.on.Play) === 'function') this.on.Play(this.Player, this.CONFIG);
       } else {
         // When the player is playing.
         _that.Pause();
@@ -687,8 +690,6 @@ export class PLAYER_MODULE_YOUTUBE {
       }
     }
 
-    if(!this.on.Play && callback) this.on.Play = callback;
-    if(this.on.Play && typeof(this.on.Play) === 'function') this.on.Play(this.Player, this.CONFIG);
   }
 
   Stop(callback){
