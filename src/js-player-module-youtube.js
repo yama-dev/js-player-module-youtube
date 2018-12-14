@@ -855,8 +855,11 @@ export class PLAYER_MODULE_YOUTUBE {
         setHtml(this.$uiDisplayPoster, '');
       } else {
         setHtml(this.$uiDisplayPoster, `<img src="${this.CONFIG.poster}" alt="">`);
-        this.$uiDisplayPosterBg[0].style.backgroundImage = `url(${this.CONFIG.poster})`;
       }
+    }
+
+    if(this.$uiDisplayPosterBg.length && this.CONFIG.mode != 'audio'){
+      this.$uiDisplayPosterBg[0].style.backgroundImage = `url(${this.CONFIG.poster})`;
     }
 
   }
