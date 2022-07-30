@@ -20,12 +20,6 @@ export class PLAYER_MODULE_YOUTUBE {
 
   constructor(options = {}){
 
-    // Set Version.
-    this.VERSION = '0.0.9';
-
-    // Use for discrimination by URL.
-    this.currentUrl = location.href;
-
     // Set Change Flgs.
     this.PlayerChangeSeekingFlg = false;
     this.PlayerChangeLoadFlg = true;
