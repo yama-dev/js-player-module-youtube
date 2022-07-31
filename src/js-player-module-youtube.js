@@ -7,7 +7,7 @@
  * Licensed under the MIT license.
  */
 
-import {PARSE_MODULE} from 'js-parse-module';
+import { Str2Mustache } from '@yama-dev/js-parse-module/libs';
 
 import { selectDom, hasClass, addClass, removeClass, toggleClass, setHtml, appendHtml, addEvent } from './util.js';
 
@@ -112,8 +112,8 @@ export class PLAYER_MODULE_YOUTUBE {
     // Set Options
     // -> playerHtml
     // -> playerCss
-    this.playerHtml = PARSE_MODULE.Str2Mustache(this.playerHtml, this.CONFIG);
-    this.playerCss  = PARSE_MODULE.Str2Mustache(this.playerCss, this.CONFIG);
+    this.playerHtml = Str2Mustache(this.playerHtml, this.CONFIG);
+    this.playerCss  = Str2Mustache(this.playerCss, this.CONFIG);
 
     // Check Audio mode.
     if(this.CONFIG.mode == 'audio'){
