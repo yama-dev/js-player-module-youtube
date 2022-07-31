@@ -47,7 +47,6 @@ export class PLAYER_MODULE_YOUTUBE {
 
       ui_clickable     : options.ui_clickable === false ? false : true,
 
-      loop             : options.loop === true ? 'loop' : '',
       muted            : options.muted === true ? true : false,
 
       playerVars: {
@@ -63,8 +62,7 @@ export class PLAYER_MODULE_YOUTUBE {
         loop: 0,
         playlist: options.videoid||'',
 
-        showinfo: 1,
-        controls: 1,
+        controls: 0,
         modestbranding: 1,
 
         playsinline: 1
