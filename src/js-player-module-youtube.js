@@ -602,6 +602,8 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   ClassOn(){
+    addClass(this.$playerElem, 'active');
+
     // Add className Play-Button.
     if(this.$uiBtnPlay.length) addClass(this.$uiBtnPlay, 'active');
 
@@ -619,6 +621,8 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   ClassOff(){
+    removeClass(this.$playerElem, 'active');
+
     // Add className Play-Button.
     if(this.$uiBtnPlay.length) removeClass(this.$uiBtnPlay, 'active');
 
