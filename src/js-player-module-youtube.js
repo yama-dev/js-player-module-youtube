@@ -308,6 +308,14 @@ export class PLAYER_MODULE_YOUTUBE {
   SetPlayer(){
     let _that = this;
 
+    if(this.CONFIG.muted){
+      this.Player.mute();
+    }
+
+    if(this.CONFIG.playerVars.autoplay){
+      this.Player.playVideo();
+    }
+
     // CacheElement
     this.CacheElement();
 
@@ -348,9 +356,9 @@ export class PLAYER_MODULE_YOUTUBE {
     },10);
 
     setInterval(()=>{
-      if(this.Player.isMuted()){
+      if(this.Player.isMuted() == true){
         if(!this.CONFIG.muted) this.CONFIG.muted = true; 
-      } else {
+      } else if(this.Player.isMuted() == false){
         if(this.CONFIG.muted) this.CONFIG.muted = false; 
       }
     },300);
@@ -758,8 +766,15 @@ export class PLAYER_MODULE_YOUTUBE {
       // 変更後に再生
       setTimeout( () => {
         this.ClassOn();
-        this.Player.playVideo();
-        this.Player.unMute();
+        if(this.CONFIG.playerVars.autoplay){
+          this.Player.playVideo();
+        }
+
+        if(this.CONFIG.muted){
+          this.Player.mute();
+        } else {
+          this.Player.unMute();
+        }
       }, 100);
 
       setTimeout( () => {
