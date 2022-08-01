@@ -61,7 +61,13 @@
           var PMY = new PLAYER_MODULE_YOUTUBE({
             id:'youtubePlayer',
             videoid:'bkRhoGPo2is',
+            // ui_clickable: false,
             responsive: true,
+            muted: false,
+            playerVars: {
+              autoplay: 0,
+              loop: 1,
+            },
             on: {
               Play: function(){ console.log('Play') },
               Pause: function(){ console.log('Pause') },
