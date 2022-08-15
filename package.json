@@ -1,6 +1,6 @@
 {
   "name": "js-player-module-youtube",
-  "version": "0.0.9",
+  "version": "0.2.0",
   "description": "YouTube custom player using the YouTube IFrame Player API.",
   "keywords": [
     "YouTube",
@@ -31,14 +31,17 @@
     "url": "https://github.com/yama-dev/js-player-module-youtube/issues"
   },
   "devDependencies": {
+    "@yama-dev/js-parse-module": "^0.2.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.0",
     "babel-loader": "^7.1.4",
     "babel-preset-env": "^1.6.1",
     "browser-sync": "^2.23.6",
-    "js-parse-module": "0.0.4",
     "npm-run-all": "^4.1.2",
     "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2"
+  },
+  "volta": {
+    "node": "14.19.2"
   }
 }

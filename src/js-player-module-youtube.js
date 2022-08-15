@@ -1,13 +1,13 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.0.9
+ * Version 0.2.0
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
  */
 
-import {PARSE_MODULE} from 'js-parse-module';
+import { Str2Mustache } from '@yama-dev/js-parse-module/libs';
 
 import { selectDom, hasClass, addClass, removeClass, toggleClass, setHtml, appendHtml, addEvent } from './util.js';
 
@@ -19,12 +19,6 @@ polyfillObjectAssign();
 export class PLAYER_MODULE_YOUTUBE {
 
   constructor(options = {}){
-
-    // Set Version.
-    this.VERSION = '0.0.9';
-
-    // Use for discrimination by URL.
-    this.currentUrl = location.href;
 
     // Set Change Flgs.
     this.PlayerChangeSeekingFlg = false;
@@ -53,7 +47,6 @@ export class PLAYER_MODULE_YOUTUBE {
 
       ui_clickable     : options.ui_clickable === false ? false : true,
 
-      loop             : options.loop === true ? 'loop' : '',
       muted            : options.muted === true ? true : false,
 
       playerVars: {
@@ -69,8 +62,7 @@ export class PLAYER_MODULE_YOUTUBE {
         loop: 0,
         playlist: options.videoid||'',
 
-        showinfo: 1,
-        controls: 1,
+        controls: 0,
         modestbranding: 1,
 
         playsinline: 1
@@ -118,8 +110,8 @@ export class PLAYER_MODULE_YOUTUBE {
     // Set Options
     // -> playerHtml
     // -> playerCss
-    this.playerHtml = PARSE_MODULE.Str2Mustache(this.playerHtml, this.CONFIG);
-    this.playerCss  = PARSE_MODULE.Str2Mustache(this.playerCss, this.CONFIG);
+    this.playerHtml = Str2Mustache(this.playerHtml, this.CONFIG);
+    this.playerCss  = Str2Mustache(this.playerCss, this.CONFIG);
 
     // Check Audio mode.
     if(this.CONFIG.mode == 'audio'){
@@ -316,6 +308,14 @@ export class PLAYER_MODULE_YOUTUBE {
   SetPlayer(){
     let _that = this;
 
+    if(this.CONFIG.muted){
+      this.Player.mute();
+    }
+
+    if(this.CONFIG.playerVars.autoplay){
+      this.Player.playVideo();
+    }
+
     // CacheElement
     this.CacheElement();
 
@@ -356,9 +356,9 @@ export class PLAYER_MODULE_YOUTUBE {
     },10);
 
     setInterval(()=>{
-      if(this.Player.isMuted()){
+      if(this.Player.isMuted() == true){
         if(!this.CONFIG.muted) this.CONFIG.muted = true; 
-      } else {
+      } else if(this.Player.isMuted() == false){
         if(this.CONFIG.muted) this.CONFIG.muted = false; 
       }
     },300);
@@ -610,6 +610,8 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   ClassOn(){
+    addClass(this.$playerElem, 'active');
+
     // Add className Play-Button.
     if(this.$uiBtnPlay.length) addClass(this.$uiBtnPlay, 'active');
 
@@ -627,6 +629,8 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   ClassOff(){
+    removeClass(this.$playerElem, 'active');
+
     // Add className Play-Button.
     if(this.$uiBtnPlay.length) removeClass(this.$uiBtnPlay, 'active');
 
@@ -762,8 +766,15 @@ export class PLAYER_MODULE_YOUTUBE {
       // 変更後に再生
       setTimeout( () => {
         this.ClassOn();
-        this.Player.playVideo();
-        this.Player.unMute();
+        if(this.CONFIG.playerVars.autoplay){
+          this.Player.playVideo();
+        }
+
+        if(this.CONFIG.muted){
+          this.Player.mute();
+        } else {
+          this.Player.unMute();
+        }
       }, 100);
 
       setTimeout( () => {
