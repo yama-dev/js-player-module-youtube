@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.2.0
+ * Version 0.3.0
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -88,11 +88,17 @@ export class PLAYER_MODULE_YOUTUBE {
     }
     this.on = {
       Play    : options.on.Play||'',
+      PlayPrep: options.on.PlayPrep||'',
       Pause   : options.on.Pause||'',
       Stop    : options.on.Stop||'',
       End     : options.on.End||'',
       StopAll : options.on.StopAll||'',
-      Change  : options.on.Change||''
+      Change  : options.on.Change||'',
+      PlayerPlay     : options.on.PlayerPlay||'', 
+      PlayerPause    : options.on.PlayerPause||'', 
+      PlayerEnded    : options.on.PlayerEnded||'',
+      PlayerBuffering: options.on.PlayerBuffering||'',
+      PlayerCued     : options.on.PlayerCued||''
     }
 
     // YoutubePlayer Instance.
@@ -270,20 +276,21 @@ export class PLAYER_MODULE_YOUTUBE {
     let onPlayerStateChange = (event)=>{
       if (event.data == YT.PlayerState.PLAYING) {
         this.ClassOn();
+        if(this.on.PlayerPlay && typeof(this.on.PlayerPlay) === 'function') this.on.PlayerPlay(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.ENDED) {
-        this.Player.stopVideo();
         this.ClassOff();
-        if(this.on.End && typeof(this.on.End) === 'function') this.on.End(this.Player, this.CONFIG);
+        if(this.on.PlayerEnded && typeof(this.on.PlayerEnded) === 'function') this.on.PlayerEnded(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.PAUSED) {
         this.ClassOff();
+        if(this.on.PlayerPause && typeof(this.on.PlayerPause) === 'function') this.on.PlayerPause(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.BUFFERING) {
-        this.ClassOff();
+        if(this.on.PlayerBuffering && typeof(this.on.PlayerBuffering) === 'function') this.on.PlayerBuffering(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.CUED) {
-        this.ClassOff();
+        if(this.on.PlayerCued && typeof(this.on.PlayerCued) === 'function') this.on.PlayerCued(this.Player, this.CONFIG);
       }
     };
 
@@ -683,6 +690,8 @@ export class PLAYER_MODULE_YOUTUBE {
     let _that = this;
     if(this.$uiBtnPlay.length){
       if(this.Player.getPlayerState() != 1){
+        if(this.on.PlayPrep && typeof(this.on.PlayPrep) === 'function') this.on.PlayPrep(this, this.Player);
+
         // When the player is stopped.
         this.Player.playVideo();
         this.ClassOn();
