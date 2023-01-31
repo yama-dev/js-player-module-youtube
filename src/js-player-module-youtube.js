@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.3.0
+ * Version 0.3.1
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -74,7 +74,10 @@ export class PLAYER_MODULE_YOUTUBE {
       stop_outfocus    : options.stop_outfocus === true ? true : false,
       poster           : options.poster||`//i.ytimg.com/vi/${options.videoid}/maxresdefault.jpg`,
 
-      add_style        : options.add_style||''
+      add_style        : options.add_style||'',
+
+      classname_active : 'is-active',
+      classname_playing : 'is-playing'
     }
 
     // Merge Options.
@@ -275,10 +278,13 @@ export class PLAYER_MODULE_YOUTUBE {
 
     let onPlayerStateChange = (event)=>{
       if (event.data == YT.PlayerState.PLAYING) {
+        addClass(this.$playerElem, this.CONFIG.classname_active);
+
         this.ClassOn();
         if(this.on.PlayerPlay && typeof(this.on.PlayerPlay) === 'function') this.on.PlayerPlay(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.ENDED) {
+        this.Player.stopVideo();
         this.ClassOff();
         if(this.on.PlayerEnded && typeof(this.on.PlayerEnded) === 'function') this.on.PlayerEnded(this.Player, this.CONFIG);
       }
@@ -287,9 +293,13 @@ export class PLAYER_MODULE_YOUTUBE {
         if(this.on.PlayerPause && typeof(this.on.PlayerPause) === 'function') this.on.PlayerPause(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.BUFFERING) {
+        addClass(this.$playerElem, this.CONFIG.classname_active);
+
         if(this.on.PlayerBuffering && typeof(this.on.PlayerBuffering) === 'function') this.on.PlayerBuffering(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.CUED) {
+        removeClass(this.$playerElem, this.CONFIG.classname_active);
+
         if(this.on.PlayerCued && typeof(this.on.PlayerCued) === 'function') this.on.PlayerCued(this.Player, this.CONFIG);
       }
     };
@@ -474,7 +484,7 @@ export class PLAYER_MODULE_YOUTUBE {
     if(this.$uiBtnVolon.length){
       addEvent(this.$uiBtnVolon, 'click' , (event) => {
         this.Player.setVolume(this.CONFIG.volume);
-        removeClass(this.$uiBtnVolon, 'active');
+        removeClass(this.$uiBtnVolon, this.CONFIG.classname_playing);
       });
     }
   }
@@ -483,7 +493,7 @@ export class PLAYER_MODULE_YOUTUBE {
     if(this.$uiBtnVoloff.length){
       addEvent(this.$uiBtnVoloff, 'click' , (event) => {
         this.Player.setVolume(0);
-        addClass(this.$uiBtnVoloff, 'active');
+        addClass(this.$uiBtnVoloff, this.CONFIG.classname_playing);
       });
     }
   }
@@ -617,35 +627,35 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   ClassOn(){
-    addClass(this.$playerElem, 'active');
+    addClass(this.$playerElem, this.CONFIG.classname_playing);
 
     // Add className Play-Button.
-    if(this.$uiBtnPlay.length) addClass(this.$uiBtnPlay, 'active');
+    if(this.$uiBtnPlay.length) addClass(this.$uiBtnPlay, this.CONFIG.classname_playing);
 
     // Add className Pause-Button.
-    if(this.$uiBtnPause.length) addClass(this.$uiBtnPause, 'active');
+    if(this.$uiBtnPause.length) addClass(this.$uiBtnPause, this.CONFIG.classname_playing);
 
     // Add className MediaChange-Button.
     if(this.$uiBtnDataId.length){
       this.$uiBtnDataId.map((item,index)=>{
         if(this.CONFIG.videoid == item.getAttribute('data-PMY-id')){
-          addClass(item, 'active');
+          addClass(item, this.CONFIG.classname_playing);
         }
       });
     }
   }
 
   ClassOff(){
-    removeClass(this.$playerElem, 'active');
+    removeClass(this.$playerElem, this.CONFIG.classname_playing);
 
     // Add className Play-Button.
-    if(this.$uiBtnPlay.length) removeClass(this.$uiBtnPlay, 'active');
+    if(this.$uiBtnPlay.length) removeClass(this.$uiBtnPlay, this.CONFIG.classname_playing);
 
     // Add className Pause-Button.
-    if(this.$uiBtnPause.length) removeClass(this.$uiBtnPause, 'active');
+    if(this.$uiBtnPause.length) removeClass(this.$uiBtnPause, this.CONFIG.classname_playing);
 
     // Remove className MediaChange-Button.
-    if(this.$uiBtnDataId.length) removeClass(this.$uiBtnDataId, 'active');
+    if(this.$uiBtnDataId.length) removeClass(this.$uiBtnDataId, this.CONFIG.classname_playing);
   }
 
   Update(){
@@ -732,14 +742,14 @@ export class PLAYER_MODULE_YOUTUBE {
 
       this.$uiSeekbarVolCover[0].style.width = '0%';
 
-      removeClass(this.$uiBtnMute, 'active');
+      removeClass(this.$uiBtnMute, this.CONFIG.classname_playing);
     }else{
       this.CONFIG.muted = true;
 
       this.Player.mute();
       this.Player.setVolume(0);
 
-      addClass(this.$uiBtnMute, 'active');
+      addClass(this.$uiBtnMute, this.CONFIG.classname_playing);
     }
   }
 

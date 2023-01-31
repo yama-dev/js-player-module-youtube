@@ -3,7 +3,7 @@
 <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# article: http://ogp.me/ns/article#">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width">
-  <title>PLAYER MODULE YOUTUBE v0.3.0 | yama-dev</title>
+  <title>PLAYER MODULE YOUTUBE | yama-dev</title>
   <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
   <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
@@ -25,7 +25,7 @@
 <body>
 <div class="container">
 
-  <h2 class="mt-3 mb-3">PLAYER MODULE YOUTUBE v0.3.0</h2>
+  <h2 class="mt-3 mb-3">PLAYER MODULE YOUTUBE</h2>
 
   <p>YouTube custom player using the YouTube IFrame Player API.</p>
 
@@ -33,7 +33,7 @@
   <span class="p-sns"><a class="github-button" href="https://github.com/yama-dev/js-player-module-youtube/releases" data-icon="octicon-cloud-download" aria-label="Download yama-dev/js-player-module-youtube on GitHub">Download</a></span>
   <span class="p-sns"><a class="github-button" href="https://github.com/yama-dev/js-player-module-youtube" data-icon="octicon-star" data-show-count="true" aria-label="Star yama-dev/js-player-module-youtube on GitHub">Star</a></span>
   <span class="p-sns"><a class="github-button" href="https://github.com/yama-dev/js-player-module-youtube/fork" data-icon="octicon-repo-forked" data-show-count="true" aria-label="Fork yama-dev/js-player-module-youtube on GitHub">Fork</a></span>
-  <span class="p-sns"><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="PLAYER MODULE YOUTUBE v0.3.0 YouTube custom player using the YouTube IFrame Player API." data-show-count="false">Tweet</a></span>
+  <span class="p-sns"><a href="https://twitter.com/share?ref_src=twsrc%5Etfw" class="twitter-share-button" data-text="PLAYER MODULE YOUTUBE | YouTube custom player using the YouTube IFrame Player API." data-show-count="false">Tweet</a></span>
   <style>.p-sns > span{ display: inline-block; }</style>
 
   <hr class="mt-4 mb-4">
@@ -43,10 +43,30 @@
     <code>
     &lt;div id=&quot;youtubePlayer&quot;&gt;
       &lt;script&gt;
-        var PMY = new PLAYER_MODULE_YOUTUBE({
-          id:&#039;youtubePlayer&#039;,
-          videoid:&#039;bkRhoGPo2is&#039;
-        });
+      const PMY = new PLAYER_MODULE_YOUTUBE({
+        id:&#039;youtubePlayer&#039;,
+        videoid:&#039;bkRhoGPo2is&#039;,
+        responsive: true,
+        muted: false,
+        playerVars: {
+          // autoplay: 0,
+          // loop: 1,
+        },
+        on: {
+          Play: function(){ console.log(&#039;Play&#039;) },
+          PlayPrep: function(){ console.log(&#039;PlayPrep&#039;) },
+          Pause: function(){ console.log(&#039;Pause&#039;) },
+          Stop: function(){ console.log(&#039;Stop&#039;) },
+          StopAll: function(){ console.log(&#039;StopAll&#039;) },
+          End: function(){ console.log(&#039;End&#039;) },
+          Change: function(){ console.log(&#039;Change&#039;) },
+          PlayerPlay: function(){ console.log(&#039;PlayerPlay&#039;) },
+          PlayerPause: function(){ console.log(&#039;PlayerPause&#039;) },
+          PlayerEnded: function(){ console.log(&#039;PlayerEnded&#039;) },
+          PlayerBuffering: function(){ console.log(&#039;PlayerBuffering&#039;) },
+          PlayerCued: function(){ console.log(&#039;PlayerCued&#039;) },
+        }
+      });
       &lt;/script&gt;
     &lt;/div&gt;</code>
   </pre>
@@ -58,7 +78,7 @@
 
       <div id="youtubePlayer" style="max-width: 750px;">
         <script>
-          var PMY = new PLAYER_MODULE_YOUTUBE({
+          const PMY = new PLAYER_MODULE_YOUTUBE({
             id:'youtubePlayer',
             videoid:'bkRhoGPo2is',
             // ui_clickable: false,
@@ -70,6 +90,7 @@
             },
             on: {
               Play: function(){ console.log('Play') },
+              PlayPrep: function(){ console.log('PlayPrep') },
               Pause: function(){ console.log('Pause') },
               Stop: function(){ console.log('Stop') },
               StopAll: function(){ console.log('StopAll') },
