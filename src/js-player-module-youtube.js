@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.3.1
+ * Version 0.4.0
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -279,7 +279,6 @@ export class PLAYER_MODULE_YOUTUBE {
     let onPlayerStateChange = (event)=>{
       if (event.data == YT.PlayerState.PLAYING) {
         addClass(this.$playerElem, this.CONFIG.classname_active);
-
         this.ClassOn();
         if(this.on.PlayerPlay && typeof(this.on.PlayerPlay) === 'function') this.on.PlayerPlay(this.Player, this.CONFIG);
       }
@@ -294,14 +293,14 @@ export class PLAYER_MODULE_YOUTUBE {
       }
       if (event.data == YT.PlayerState.BUFFERING) {
         addClass(this.$playerElem, this.CONFIG.classname_active);
-
         if(this.on.PlayerBuffering && typeof(this.on.PlayerBuffering) === 'function') this.on.PlayerBuffering(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.CUED) {
         removeClass(this.$playerElem, this.CONFIG.classname_active);
-
         if(this.on.PlayerCued && typeof(this.on.PlayerCued) === 'function') this.on.PlayerCued(this.Player, this.CONFIG);
       }
+
+      this.Update();
     };
 
     let onPlayerError = (data)=>{
