@@ -105,7 +105,7 @@ export class PLAYER_MODULE_YOUTUBE {
     }
 
     // YoutubePlayer Instance.
-    this.Player = '';
+    this.Player = null;
 
     // Player wrapper.
     this.$playerElem = selectDom(`#${this.CONFIG.id}`);
