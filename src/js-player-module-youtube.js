@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.3.1
+ * Version 0.4.0
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -105,7 +105,7 @@ export class PLAYER_MODULE_YOUTUBE {
     }
 
     // YoutubePlayer Instance.
-    this.Player = '';
+    this.Player = null;
 
     // Player wrapper.
     this.$playerElem = selectDom(`#${this.CONFIG.id}`);
@@ -279,7 +279,6 @@ export class PLAYER_MODULE_YOUTUBE {
     let onPlayerStateChange = (event)=>{
       if (event.data == YT.PlayerState.PLAYING) {
         addClass(this.$playerElem, this.CONFIG.classname_active);
-
         this.ClassOn();
         if(this.on.PlayerPlay && typeof(this.on.PlayerPlay) === 'function') this.on.PlayerPlay(this.Player, this.CONFIG);
       }
@@ -294,14 +293,14 @@ export class PLAYER_MODULE_YOUTUBE {
       }
       if (event.data == YT.PlayerState.BUFFERING) {
         addClass(this.$playerElem, this.CONFIG.classname_active);
-
         if(this.on.PlayerBuffering && typeof(this.on.PlayerBuffering) === 'function') this.on.PlayerBuffering(this.Player, this.CONFIG);
       }
       if (event.data == YT.PlayerState.CUED) {
         removeClass(this.$playerElem, this.CONFIG.classname_active);
-
         if(this.on.PlayerCued && typeof(this.on.PlayerCued) === 'function') this.on.PlayerCued(this.Player, this.CONFIG);
       }
+
+      this.Update();
     };
 
     let onPlayerError = (data)=>{
@@ -360,25 +359,39 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   WatchPlayer(){
-    setInterval(()=>{
-      // For Timeupdate.
-      this.Update();
 
-      // For Volume change.
-      if(this.CONFIG.muted){
-        this.$uiSeekbarVolCover[0].style.width = '0%';
-      } else {
-        this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
-      }
-    },10);
+    let _frame = 0;
+    let _animation = ()=>{
+      requestAnimationFrame(_animation);
 
-    setInterval(()=>{
-      if(this.Player.isMuted() == true){
-        if(!this.CONFIG.muted) this.CONFIG.muted = true; 
-      } else if(this.Player.isMuted() == false){
-        if(this.CONFIG.muted) this.CONFIG.muted = false; 
+      _frame++;
+
+      if (_frame % 3 != 0) { // FPS 20
+        return false;
       }
-    },300);
+
+      let _state = this.Player.playerInfo.playerState;
+
+      if(_state !== -1 && _state !== 2 && _state !== 5){
+        // For Timeupdate.
+        this.Update();
+
+        // For Volume change.
+        if(this.CONFIG.muted){
+          this.$uiSeekbarVolCover[0].style.width = '0%';
+        } else {
+          this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
+        }
+
+        if(this.Player.isMuted() == true){
+          if(!this.CONFIG.muted) this.CONFIG.muted = true; 
+        } else if(this.Player.isMuted() == false){
+          if(this.CONFIG.muted) this.CONFIG.muted = false; 
+        }
+      }
+
+    };
+    requestAnimationFrame(_animation);
   }
 
   AddGlobalObject(){
