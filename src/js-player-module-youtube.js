@@ -359,25 +359,39 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   WatchPlayer(){
-    setInterval(()=>{
-      // For Timeupdate.
-      this.Update();
 
-      // For Volume change.
-      if(this.CONFIG.muted){
-        this.$uiSeekbarVolCover[0].style.width = '0%';
-      } else {
-        this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
-      }
-    },10);
+    let _frame = 0;
+    let _animation = ()=>{
+      requestAnimationFrame(_animation);
 
-    setInterval(()=>{
-      if(this.Player.isMuted() == true){
-        if(!this.CONFIG.muted) this.CONFIG.muted = true; 
-      } else if(this.Player.isMuted() == false){
-        if(this.CONFIG.muted) this.CONFIG.muted = false; 
+      _frame++;
+
+      if (_frame % 3 != 0) { // FPS 20
+        return false;
       }
-    },300);
+
+      let _state = this.Player.playerInfo.playerState;
+
+      if(_state !== -1 && _state !== 2 && _state !== 5){
+        // For Timeupdate.
+        this.Update();
+
+        // For Volume change.
+        if(this.CONFIG.muted){
+          this.$uiSeekbarVolCover[0].style.width = '0%';
+        } else {
+          this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
+        }
+
+        if(this.Player.isMuted() == true){
+          if(!this.CONFIG.muted) this.CONFIG.muted = true; 
+        } else if(this.Player.isMuted() == false){
+          if(this.CONFIG.muted) this.CONFIG.muted = false; 
+        }
+      }
+
+    };
+    requestAnimationFrame(_animation);
   }
 
   AddGlobalObject(){
