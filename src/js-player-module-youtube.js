@@ -1,7 +1,7 @@
 /*!
  * JS PLAYER MODULE YOUTUBE (JavaScript Library)
  *   js-player-module-youtube.js
- * Version 0.4.0
+ * Version 0.4.1
  * Repository https://github.com/yama-dev/js-player-module-youtube
  * Copyright yama-dev
  * Licensed under the MIT license.
@@ -12,9 +12,6 @@ import { Str2Mustache } from '@yama-dev/js-parse-module/libs';
 import { selectDom, hasClass, addClass, removeClass, toggleClass, setHtml, appendHtml, addEvent } from './util.js';
 
 import { viewPlayerMain, viewPlayerUi, viewPlayerStyle } from './view.js';
-
-import polyfillObjectAssign from './polyfill.object.assign.js';
-polyfillObjectAssign();
 
 export class PLAYER_MODULE_YOUTUBE {
 
@@ -377,16 +374,10 @@ export class PLAYER_MODULE_YOUTUBE {
         this.Update();
 
         // For Volume change.
-        if(this.CONFIG.muted){
-          this.$uiSeekbarVolCover[0].style.width = '0%';
-        } else {
-          this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
-        }
-
         if(this.Player.isMuted() == true){
-          if(!this.CONFIG.muted) this.CONFIG.muted = true; 
+          this.$uiSeekbarVolCover[0].style.width = '0%';
         } else if(this.Player.isMuted() == false){
-          if(this.CONFIG.muted) this.CONFIG.muted = false; 
+          this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
         }
       }
 
@@ -517,7 +508,12 @@ export class PLAYER_MODULE_YOUTUBE {
   EventSeekbarVol(){
     if(this.$uiSeekbarVol.length){
       let _flag = false;
-      this.$uiSeekbarVolCover[0].style.width = '100%';
+
+      if(this.Player.isMuted() == true){
+        this.$uiSeekbarVolCover[0].style.width = '0%';
+      } else if(this.Player.isMuted() == false){
+        this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
+      }
 
       addEvent(this.$uiSeekbarVol, 'mousedown' , (event) => {
         _flag = true;
