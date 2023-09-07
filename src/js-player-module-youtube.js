@@ -374,16 +374,10 @@ export class PLAYER_MODULE_YOUTUBE {
         this.Update();
 
         // For Volume change.
-        if(this.CONFIG.muted){
-          this.$uiSeekbarVolCover[0].style.width = '0%';
-        } else {
-          this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
-        }
-
         if(this.Player.isMuted() == true){
-          if(!this.CONFIG.muted) this.CONFIG.muted = true; 
+          this.$uiSeekbarVolCover[0].style.width = '0%';
         } else if(this.Player.isMuted() == false){
-          if(this.CONFIG.muted) this.CONFIG.muted = false; 
+          this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
         }
       }
 
@@ -514,7 +508,12 @@ export class PLAYER_MODULE_YOUTUBE {
   EventSeekbarVol(){
     if(this.$uiSeekbarVol.length){
       let _flag = false;
-      this.$uiSeekbarVolCover[0].style.width = '100%';
+
+      if(this.Player.isMuted() == true){
+        this.$uiSeekbarVolCover[0].style.width = '0%';
+      } else if(this.Player.isMuted() == false){
+        this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
+      }
 
       addEvent(this.$uiSeekbarVol, 'mousedown' , (event) => {
         _flag = true;
