@@ -13,9 +13,6 @@ import { selectDom, hasClass, addClass, removeClass, toggleClass, setHtml, appen
 
 import { viewPlayerMain, viewPlayerUi, viewPlayerStyle } from './view.js';
 
-import polyfillObjectAssign from './polyfill.object.assign.js';
-polyfillObjectAssign();
-
 export class PLAYER_MODULE_YOUTUBE {
 
   constructor(options = {}){
