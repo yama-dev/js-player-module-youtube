@@ -1,11 +1,4 @@
-/*!
- * JS PLAYER MODULE YOUTUBE (JavaScript Library)
- *   js-player-module-youtube.js
- * Version 0.4.1
- * Repository https://github.com/yama-dev/js-player-module-youtube
- * Copyright yama-dev
- * Licensed under the MIT license.
- */
+/*! JS PLAYER MODULE YOUTUBE (JavaScript Library) v0.4.5 Copyright yama-dev Licensed MIT */
 
 import { Str2Mustache } from '@yama-dev/js-parse-module/libs';
 
