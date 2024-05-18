@@ -1,6 +1,6 @@
 {
   "name": "js-player-module-youtube",
-  "version": "0.4.1",
+  "version": "0.4.5",
   "description": "YouTube custom player using the YouTube IFrame Player API.",
   "keywords": [
     "YouTube",
@@ -42,6 +42,6 @@
     "webpack-cli": "^3.1.2"
   },
   "volta": {
-    "node": "14.19.2"
+    "node": "16.20.2"
   }
 }
