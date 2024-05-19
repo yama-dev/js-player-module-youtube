@@ -388,7 +388,7 @@ export class PLAYER_MODULE_YOUTUBE {
         return false;
       }
 
-      let _state = this.Player.playerInfo.playerState;
+      let _state = this.Player.getPlayerState();
 
       if(_state !== -1 && _state !== 2 && _state !== 5){
         // For Timeupdate.
