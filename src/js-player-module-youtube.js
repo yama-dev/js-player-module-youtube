@@ -909,7 +909,9 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   SetPoster(){
-    if(this.CONFIG.poster != false) this.CONFIG.poster = `//i.ytimg.com/vi/${this.CONFIG.videoid}/maxresdefault.jpg`;
+    if(this.CONFIG.poster != false){
+      this.CONFIG.poster = `//i.ytimg.com/vi/${this.STATE.playlist[this.STATE.playlist_index]}/maxresdefault.jpg`;
+    }
 
     if(this.$uiDisplayPoster.length){
       if(this.CONFIG.mode == 'audio'){
