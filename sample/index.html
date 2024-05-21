@@ -48,9 +48,10 @@
         videoid:&#039;bkRhoGPo2is&#039;,
         responsive: true,
         muted: false,
+        loop: false,
         playerVars: {
-          // autoplay: 0,
-          // loop: 1,
+          autoplay: 0,
+          // loop: 1, 無音ループ再生のバグがあるので利用しない
         },
         on: {
           Play: function(){ console.log(&#039;Play&#039;) },
@@ -84,9 +85,10 @@
             // ui_clickable: false,
             responsive: true,
             muted: false,
+            loop: false,
             playerVars: {
-              // autoplay: 0,
-              // loop: 1,
+              autoplay: 0,
+              // loop: 1, 無音ループ再生のバグがあるので利用しない
             },
             on: {
               Play: function(){ console.log('Play') },

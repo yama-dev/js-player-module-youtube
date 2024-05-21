@@ -38,6 +38,42 @@
 
   <hr class="mt-4 mb-4">
 
+  <h3>Basic Use</h3>
+  <pre class="prettyprint lang-html mt-2">
+    <code>
+    &lt;div id=&quot;youtubePlayer&quot;&gt;
+      &lt;script&gt;
+      const PMY = new PLAYER_MODULE_YOUTUBE({
+        id:&#039;youtubePlayer&#039;,
+        videoid:&#039;bkRhoGPo2is&#039;,
+        responsive: true,
+        muted: true,
+        loop: true,
+        playerVars: {
+          autoplay: 1,
+          // loop: 1, 無音ループ再生のバグがあるので利用しない
+        },
+        on: {
+          Play: function(){ console.log(&#039;Play&#039;) },
+          PlayPrep: function(){ console.log(&#039;PlayPrep&#039;) },
+          Pause: function(){ console.log(&#039;Pause&#039;) },
+          Stop: function(){ console.log(&#039;Stop&#039;) },
+          StopAll: function(){ console.log(&#039;StopAll&#039;) },
+          End: function(){ console.log(&#039;End&#039;) },
+          Change: function(){ console.log(&#039;Change&#039;) },
+          PlayerPlay: function(){ console.log(&#039;PlayerPlay&#039;) },
+          PlayerPause: function(){ console.log(&#039;PlayerPause&#039;) },
+          PlayerEnded: function(){ console.log(&#039;PlayerEnded&#039;) },
+          PlayerBuffering: function(){ console.log(&#039;PlayerBuffering&#039;) },
+          PlayerCued: function(){ console.log(&#039;PlayerCued&#039;) },
+        }
+      });
+      &lt;/script&gt;
+    &lt;/div&gt;</code>
+  </pre>
+
+  <hr class="mt-4 mb-4">
+
   <div class="row">
     <div class="col-sm col-lg-6 mb-4">
 
@@ -49,9 +85,10 @@
             // ui_clickable: false,
             responsive: true,
             muted: true,
+            loop: true,
             playerVars: {
               autoplay: 1,
-              // loop: 1,
+              // loop: 1, 無音ループ再生のバグがあるので利用しない
             },
             on: {
               Play: function(){ console.log('Play') },

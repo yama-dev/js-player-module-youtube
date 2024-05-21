@@ -1,11 +1,4 @@
-/*!
- * JS PLAYER MODULE YOUTUBE (JavaScript Library)
- *   js-player-module-youtube.js
- * Version 0.4.1
- * Repository https://github.com/yama-dev/js-player-module-youtube
- * Copyright yama-dev
- * Licensed under the MIT license.
- */
+/*! JS PLAYER MODULE YOUTUBE (JavaScript Library) v0.4.5 Copyright yama-dev Licensed MIT */
 
 import { Str2Mustache } from '@yama-dev/js-parse-module/libs';
 
@@ -46,6 +39,10 @@ export class PLAYER_MODULE_YOUTUBE {
 
       muted            : options.muted === true ? true : false,
 
+      loop            : options.loop||false,
+
+      playlist: options.playlist || [options.videoid],
+
       playerVars: {
         fs: 1,
         rel: 0,
@@ -57,7 +54,7 @@ export class PLAYER_MODULE_YOUTUBE {
 
         autoplay: 0,
         loop: 0,
-        playlist: options.videoid||'',
+        // playlist: '',
 
         controls: 0,
         modestbranding: 1,
@@ -75,6 +72,12 @@ export class PLAYER_MODULE_YOUTUBE {
 
       classname_active : 'is-active',
       classname_playing : 'is-playing'
+    }
+
+    // Set config, options.
+    this.STATE = {
+      playlist: this.CONFIG.playlist,
+      playlist_index: 0,
     }
 
     // Merge Options.
@@ -282,7 +285,25 @@ export class PLAYER_MODULE_YOUTUBE {
       if (event.data == YT.PlayerState.ENDED) {
         this.Player.stopVideo();
         this.ClassOff();
+
         if(this.on.PlayerEnded && typeof(this.on.PlayerEnded) === 'function') this.on.PlayerEnded(this.Player, this.CONFIG);
+
+        if(this.STATE.playlist_index + 1 == this.STATE.playlist.length){
+          // 最後のIDの場合
+          this.STATE.playlist_index = 0;
+          if(this.CONFIG.loop){
+            this.Player.clearVideo();
+            this.Player.loadVideoById(this.STATE.playlist[this.STATE.playlist_index], 0, 'large');
+            this.SetPoster();
+            this.Player.playVideo();
+          }
+        } else {
+          this.STATE.playlist_index++;
+          this.Player.clearVideo();
+          this.Player.loadVideoById(this.STATE.playlist[this.STATE.playlist_index], 0, 'large');
+          this.SetPoster();
+          this.Player.playVideo();
+        }
       }
       if (event.data == YT.PlayerState.PAUSED) {
         this.ClassOff();
@@ -307,7 +328,7 @@ export class PLAYER_MODULE_YOUTUBE {
     this.Player = new YT.Player(`${this.CONFIG.player_id}`, {
       width: this.CONFIG.width,
       height: this.CONFIG.height,
-      videoId: this.CONFIG.videoid,
+      videoId: this.STATE.playlist[this.STATE.playlist_index],
       playerVars: this.CONFIG.playerVars,
       events: {
         onReady: onPlayerReady,
@@ -367,7 +388,7 @@ export class PLAYER_MODULE_YOUTUBE {
         return false;
       }
 
-      let _state = this.Player.playerInfo.playerState;
+      let _state = this.Player.getPlayerState();
 
       if(_state !== -1 && _state !== 2 && _state !== 5){
         // For Timeupdate.
@@ -393,14 +414,12 @@ export class PLAYER_MODULE_YOUTUBE {
       window.PLAYER_MODULE_YOUTUBE_PLATLIST = [];
       window.PLAYER_MODULE_YOUTUBE_PLATLIST.push({
         Player: this.Player,
-        videoid: this.CONFIG.videoid,
         id: this.CONFIG.id,
         player_id: this.CONFIG.player_id
       });
     }else{
       window.PLAYER_MODULE_YOUTUBE_PLATLIST.push({
         Player: this.Player,
-        videoid: this.CONFIG.videoid,
         id: this.CONFIG.id,
         player_id: this.CONFIG.player_id
       });
@@ -890,7 +909,9 @@ export class PLAYER_MODULE_YOUTUBE {
   }
 
   SetPoster(){
-    if(this.CONFIG.poster != false) this.CONFIG.poster = `//i.ytimg.com/vi/${this.CONFIG.videoid}/maxresdefault.jpg`;
+    if(this.CONFIG.poster != false){
+      this.CONFIG.poster = `//i.ytimg.com/vi/${this.STATE.playlist[this.STATE.playlist_index]}/maxresdefault.jpg`;
+    }
 
     if(this.$uiDisplayPoster.length){
       if(this.CONFIG.mode == 'audio'){
