@@ -1,4 +1,4 @@
-/*! JS PLAYER MODULE YOUTUBE (JavaScript Library) v0.4.5 Copyright yama-dev Licensed MIT */
+/*! JS PLAYER MODULE YOUTUBE (JavaScript Library) v0.4.6 Copyright yama-dev Licensed MIT */
 
 import { Str2Mustache } from '@yama-dev/js-parse-module/libs';
 
@@ -395,10 +395,12 @@ export class PLAYER_MODULE_YOUTUBE {
         this.Update();
 
         // For Volume change.
-        if(this.Player.isMuted() == true){
-          this.$uiSeekbarVolCover[0].style.width = '0%';
-        } else if(this.Player.isMuted() == false){
-          this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
+        if(this.$uiSeekbarVolCover.length){
+          if(this.Player.isMuted() == true){
+            this.$uiSeekbarVolCover[0].style.width = '0%';
+          } else if(this.Player.isMuted() == false){
+            this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
+          }
         }
       }
 
@@ -528,10 +530,12 @@ export class PLAYER_MODULE_YOUTUBE {
     if(this.$uiSeekbarVol.length){
       let _flag = false;
 
-      if(this.Player.isMuted() == true){
-        this.$uiSeekbarVolCover[0].style.width = '0%';
-      } else if(this.Player.isMuted() == false){
-        this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
+      if(this.$uiSeekbarVolCover.length){
+        if(this.Player.isMuted() == true){
+          this.$uiSeekbarVolCover[0].style.width = '0%';
+        } else if(this.Player.isMuted() == false){
+          this.$uiSeekbarVolCover[0].style.width = `${this.Player.getVolume()}%`;
+        }
       }
 
       addEvent(this.$uiSeekbarVol, 'mousedown' , (event) => {
@@ -768,7 +772,9 @@ export class PLAYER_MODULE_YOUTUBE {
       this.Player.unMute();
       this.Player.setVolume(this.CONFIG.volume);
 
-      this.$uiSeekbarVolCover[0].style.width = '0%';
+      if(this.$uiSeekbarVolCover.length){
+        this.$uiSeekbarVolCover[0].style.width = '0%';
+      }
 
       removeClass(this.$uiBtnMute, this.CONFIG.classname_playing);
     }else{
