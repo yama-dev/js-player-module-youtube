@@ -1,4 +1,4 @@
-/*! JS PLAYER MODULE YOUTUBE (JavaScript Library) v0.4.6 Copyright yama-dev Licensed MIT */
+/*! JS PLAYER MODULE YOUTUBE (JavaScript Library) v0.4.7 Copyright yama-dev Licensed MIT */
 
 import { Str2Mustache } from '@yama-dev/js-parse-module/libs';
 
@@ -288,22 +288,34 @@ export class PLAYER_MODULE_YOUTUBE {
 
         if(this.on.PlayerEnded && typeof(this.on.PlayerEnded) === 'function') this.on.PlayerEnded(this.Player, this.CONFIG);
 
-        if(this.STATE.playlist_index + 1 == this.STATE.playlist.length){
-          // 最後のIDの場合
-          this.STATE.playlist_index = 0;
+        if(this.STATE.playlist.length == 1){
           if(this.CONFIG.loop){
+            this.Player.loadVideoById({
+              videoId: this.STATE.playlist[this.STATE.playlist_index],
+              startSeconds: this.CONFIG.playerVars.start ? this.CONFIG.playerVars.start : 0,
+              endSeconds: this.CONFIG.playerVars.end ? this.CONFIG.playerVars.end : null,
+            });
+            this.Player.playVideo();
+          }
+        } else {
+          if(this.STATE.playlist_index + 1 == this.STATE.playlist.length){
+            // 最後のIDの場合
+            this.STATE.playlist_index = 0;
+            if(this.CONFIG.loop){
+              this.Player.clearVideo();
+              this.Player.loadVideoById(this.STATE.playlist[this.STATE.playlist_index], 0, 'large');
+              this.SetPoster();
+              this.Player.playVideo();
+            }
+          } else {
+            this.STATE.playlist_index++;
             this.Player.clearVideo();
             this.Player.loadVideoById(this.STATE.playlist[this.STATE.playlist_index], 0, 'large');
             this.SetPoster();
             this.Player.playVideo();
           }
-        } else {
-          this.STATE.playlist_index++;
-          this.Player.clearVideo();
-          this.Player.loadVideoById(this.STATE.playlist[this.STATE.playlist_index], 0, 'large');
-          this.SetPoster();
-          this.Player.playVideo();
         }
+
       }
       if (event.data == YT.PlayerState.PAUSED) {
         this.ClassOff();
@@ -806,6 +818,9 @@ export class PLAYER_MODULE_YOUTUBE {
 
       // Overwrite video id.
       this.CONFIG.videoid = id;
+      this.CONFIG.playlist = [id];
+      this.STATE.playlist_index = 0; 
+      this.STATE.playlist = JSON.parse(JSON.stringify(this.CONFIG.playlist));
 
       this.Player.loadVideoById(id, 0);
 
